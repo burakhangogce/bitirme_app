@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "594418777079",
+    "project_id": "bitirme-app-98ef4",
+    "storage_bucket": "bitirme-app-98ef4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594418777079:android:686a02192f717474434cf2",
+        "android_client_info": {
+          "package_name": "com.example.bitirme_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594418777079-vf3ehramimk9n3653rcusqs5p3im31ek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bitirme_app",
+            "certificate_hash": "16cf3312998ae64cf9e6491710cba5da1332dafc"
+          }
+        },
+        {
+          "client_id": "594418777079-csjeq112cq69msbmf5u41el4s1jidhee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3u0vPBbFeVgs2lkpasb0MkceA9X_ZAs0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594418777079-csjeq112cq69msbmf5u41el4s1jidhee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

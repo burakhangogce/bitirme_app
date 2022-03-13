@@ -326,7 +326,7 @@ class _BottomNavigationTravelkuyState extends State<BottomNavigationTravelkuy> {
             icon: _selectedIndex == 0
                 ? new SvgPicture.asset('assets/icons/home_colored.svg')
                 : new SvgPicture.asset('assets/icons/home.svg'),
-            label: 'Home',
+            label: 'Ana Sayfa',
           ),
           BottomNavigationBarItem(
               icon: _selectedIndex == 1

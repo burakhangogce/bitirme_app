@@ -115,158 +115,154 @@ class _MyProfileState extends State<MyProfile> {
         "https://play.google.com/store/apps/details?id=bukhantech.algoritmik_fikir_quiz";
     final key = new GlobalKey<ScaffoldState>();
 
-    return Scaffold(
-      key: key,
-      backgroundColor: Colors.blue.shade400,
-      body: Stack(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 25, right: 25, top: 10),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  width: 150,
-                  height: 150,
-                  padding: EdgeInsets.all(8),
+    return Stack(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(left: 25, right: 25, top: 10),
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                width: 150,
+                height: 150,
+                padding: EdgeInsets.all(8),
+                child: Container(
+                  padding: EdgeInsets.all(3),
                   child: Container(
-                    padding: EdgeInsets.all(3),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('images/birdcanta.png'),
-                        ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('images/birdcanta.png'),
                       ),
                     ),
                   ),
                 ),
-                Text(
-                  '${loggedInUser.username}',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                      fontFamily: "Poppins"),
-                ),
-                Text(
-                  'BİZİ TAKİP ET!',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w300, color: Colors.black),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                SocialIcons(),
-                SizedBox(height: 15),
-                Expanded(
-                  child: ListView(
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {},
-                        child: ProfileListItem(
-                          icon: LineAwesomeIcons.bell,
-                          text: 'Bildirimler',
-                        ),
+              ),
+              Text(
+                '${loggedInUser.username}',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                    fontFamily: "Poppins"),
+              ),
+              Text(
+                'BİZİ TAKİP ET!',
+                style:
+                    TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              SocialIcons(),
+              SizedBox(height: 15),
+              Expanded(
+                child: ListView(
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {},
+                      child: ProfileListItem(
+                        icon: LineAwesomeIcons.bell,
+                        text: 'Bildirimler',
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(loggedInUser.uid)
-                              .get()
-                              .then((value) {
-                            // show the dialog
-                            String startDate = value['subStartDate'];
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(loggedInUser.uid)
+                            .get()
+                            .then((value) {
+                          // show the dialog
+                          String startDate = value['subStartDate'];
 
-                            showDialog(
-                              context: this.context,
-                              builder: (dialogContext) {
-                                return AlertDialog(
-                                  title: Text("BİLGİ"),
-                                  content: loggedInUser.userType == "free"
-                                      ? Text(
-                                          "Herhangi bir pakete sahip değilsiniz. Bir sorun olduğunu düşünüyorsanız bizimle iletişime geçiniz.")
-                                      : Text(
-                                          "Premium pakete sahipsiniz.\nPaket başlangıç tarihi: $startDate"),
-                                  actions: [
-                                    loggedInUser.userType == "free"
-                                        ? TextButton(
-                                            child: Text("Satın Al"),
-                                            onPressed: () {
-                                              launch(
-                                                  'https://www.shopier.com/ShowProductNew/storefront.php?shop=algoritmikfikir&sid=dzFWRDQzcHBGOE01S2U2aDBfLTFfIF8g');
-                                            },
-                                          )
-                                        : Container(),
-                                    TextButton(
-                                      child: Text("Tamam"),
-                                      onPressed: () {
-                                        Navigator.pop(dialogContext);
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          });
-                        },
-                        child: ProfileListItem(
-                          icon: LineAwesomeIcons.history,
-                          text: 'Abonelik bilgilerim',
-                        ),
+                          showDialog(
+                            context: this.context,
+                            builder: (dialogContext) {
+                              return AlertDialog(
+                                title: Text("BİLGİ"),
+                                content: loggedInUser.userType == "free"
+                                    ? Text(
+                                        "Herhangi bir pakete sahip değilsiniz. Bir sorun olduğunu düşünüyorsanız bizimle iletişime geçiniz.")
+                                    : Text(
+                                        "Premium pakete sahipsiniz.\nPaket başlangıç tarihi: $startDate"),
+                                actions: [
+                                  loggedInUser.userType == "free"
+                                      ? TextButton(
+                                          child: Text("Satın Al"),
+                                          onPressed: () {
+                                            launch(
+                                                'https://www.shopier.com/ShowProductNew/storefront.php?shop=algoritmikfikir&sid=dzFWRDQzcHBGOE01S2U2aDBfLTFfIF8g');
+                                          },
+                                        )
+                                      : Container(),
+                                  TextButton(
+                                    child: Text("Tamam"),
+                                    onPressed: () {
+                                      Navigator.pop(dialogContext);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        });
+                      },
+                      child: ProfileListItem(
+                        icon: LineAwesomeIcons.history,
+                        text: 'Abonelik bilgilerim',
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          launch('https://www.instagram.com/algoritmikfikir/');
-                        },
-                        child: ProfileListItem(
-                          icon: LineAwesomeIcons.question_circle,
-                          text: 'Yardım & Destek',
-                        ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        launch('https://www.instagram.com/algoritmikfikir/');
+                      },
+                      child: ProfileListItem(
+                        icon: LineAwesomeIcons.question_circle,
+                        text: 'Yardım & Destek',
                       ),
-                      ProfileListItem(
-                        icon: LineAwesomeIcons.cog,
-                        text: 'Ayarlar',
+                    ),
+                    ProfileListItem(
+                      icon: LineAwesomeIcons.cog,
+                      text: 'Ayarlar',
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: ProfileListItem(
+                        icon: LineAwesomeIcons.columns,
+                        text: 'tema',
                       ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: ProfileListItem(
-                          icon: LineAwesomeIcons.columns,
-                          text: 'tema',
-                        ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(new ClipboardData(text: _copy));
+                        key.currentState!.showSnackBar(SnackBar(
+                          content: new Text("Davet linki kopyalandı!"),
+                        ));
+                      },
+                      child: ProfileListItem(
+                        icon: LineAwesomeIcons.user_plus,
+                        text: 'Davet et!',
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          Clipboard.setData(new ClipboardData(text: _copy));
-                          key.currentState!.showSnackBar(SnackBar(
-                            content: new Text("Davet linki kopyalandı!"),
-                          ));
-                        },
-                        child: ProfileListItem(
-                          icon: LineAwesomeIcons.user_plus,
-                          text: 'Davet et!',
-                        ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        logout(context);
+                      },
+                      child: ProfileListItem(
+                        icon: LineAwesomeIcons.alternate_sign_out,
+                        text: 'Çıkış',
+                        hasNavigation: false,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          logout(context);
-                        },
-                        child: ProfileListItem(
-                          icon: LineAwesomeIcons.alternate_sign_out,
-                          text: 'Çıkış',
-                          hasNavigation: false,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 

@@ -23,6 +23,8 @@ Future<void> main() async {
 }
 
 //meraba
+
+//son degisiklik
 class MyApp extends StatelessWidget {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 

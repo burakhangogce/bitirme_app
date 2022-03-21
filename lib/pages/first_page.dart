@@ -6,6 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../widgets/event_click.dart';
+import '../widgets/event_list.dart';
+import '../widgets/my_events.dart';
+
 class FirstPage extends StatefulWidget {
   const FirstPage({Key? key}) : super(key: key);
 
@@ -57,7 +61,7 @@ class _FirstPageState extends State<FirstPage> {
               children: [
                 StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('slider')
+                        .collection('events')
                         .snapshots(),
                     builder: (context, snapshot) {
                       return snapshot.data == null
@@ -88,7 +92,7 @@ class _FirstPageState extends State<FirstPage> {
                                       borderRadius: BorderRadius.circular(8),
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                            map['sliderImg'],
+                                            map['eventImg'],
                                           ),
                                           fit: BoxFit.cover),
                                     ),
@@ -103,7 +107,23 @@ class _FirstPageState extends State<FirstPage> {
               ],
             ),
           ),
-
+// Travlog Section
+          Padding(
+            padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
+            child: Text(
+              'Planladığım Etkinliklerim!',
+              style: mTitleStyle,
+            ),
+          ),
+          myEvents(),
+          Padding(
+            padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
+            child: Text(
+              'Etkinlikler!',
+              style: mTitleStyle,
+            ),
+          ),
+          eventList(),
           // Service Section
           Padding(
             padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
@@ -345,86 +365,6 @@ class _FirstPageState extends State<FirstPage> {
                         );
                 }),
           ),
-
-          // Travlog Section
-          Padding(
-            padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
-            child: Text(
-              'Travlogs!',
-              style: mTitleStyle,
-            ),
-          ),
-          Container(
-            height: 181,
-            child: ListView.builder(
-              padding: EdgeInsets.only(left: 16),
-              itemCount: travlogs.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.only(right: 16),
-                  width: 220,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          Container(
-                            height: 104,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(
-                                  image: AssetImage(travlogs[index].image),
-                                  fit: BoxFit.cover),
-                            ),
-                          ),
-                          Positioned(
-                            child: SvgPicture.asset(
-                                'assets/svg/travlog_top_corner.svg'),
-                            right: 0,
-                          ),
-                          Positioned(
-                            top: 8,
-                            right: 8,
-                            child: SvgPicture.asset(
-                                'assets/svg/travelkuy_logo_white.svg'),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            child: SvgPicture.asset(
-                                'assets/svg/travlog_bottom_gradient.svg'),
-                          ),
-                          Positioned(
-                            bottom: 8,
-                            left: 8,
-                            child: Text(
-                              'Travlog ' + travlogs[index].name,
-                              style: mTravlogTitleStyle,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        travlogs[index].content,
-                        maxLines: 3,
-                        style: mTravlogContentStyle,
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      Text(
-                        travlogs[index].place,
-                        style: mTravlogPlaceStyle,
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          )
         ],
       ),
     );

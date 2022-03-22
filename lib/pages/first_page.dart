@@ -1,4 +1,5 @@
 import 'package:bitirme_app/firebase_login/auth_service.dart';
+import 'package:bitirme_app/pages/event_detail.dart';
 import 'package:bitirme_app/pages/home_page.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,7 +44,6 @@ class _FirstPageState extends State<FirstPage> {
       child: ListView(
         physics: ClampingScrollPhysics(),
         children: <Widget>[
-          // Promos Section
           Padding(
             padding: EdgeInsets.only(left: 16, bottom: 24),
             child: Text(
@@ -87,14 +87,30 @@ class _FirstPageState extends State<FirstPage> {
                                 itemBuilder: (BuildContext context, index) {
                                   final DocumentSnapshot map =
                                       snapshot.data!.docs[index];
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                      image: DecorationImage(
-                                          image: NetworkImage(
-                                            map['eventImg'],
-                                          ),
-                                          fit: BoxFit.cover),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => EventDetail(
+                                                    eventDate: map['eventDate'],
+                                                    eventDesc: map['eventDesc'],
+                                                    eventId: map['eventId'],
+                                                    eventImg: map['eventImg'],
+                                                    eventPlat: map['eventPlat'],
+                                                    eventTitle:
+                                                        map['eventTitle'],
+                                                  )));
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                              map['eventImg'],
+                                            ),
+                                            fit: BoxFit.cover),
+                                      ),
                                     ),
                                   );
                                 },
@@ -107,9 +123,8 @@ class _FirstPageState extends State<FirstPage> {
               ],
             ),
           ),
-// Travlog Section
           Padding(
-            padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
+            padding: EdgeInsets.only(left: 16, top: 14, bottom: 12),
             child: Text(
               'Planladığım Etkinliklerim!',
               style: mTitleStyle,
@@ -117,14 +132,13 @@ class _FirstPageState extends State<FirstPage> {
           ),
           myEvents(),
           Padding(
-            padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
+            padding: EdgeInsets.only(left: 16, top: 14, bottom: 12),
             child: Text(
               'Etkinlikler!',
               style: mTitleStyle,
             ),
           ),
           eventList(),
-          // Service Section
           Padding(
             padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
             child: Text(
@@ -299,8 +313,6 @@ class _FirstPageState extends State<FirstPage> {
               ],
             ),
           ),
-
-          // Popular Destination Section
           Padding(
             padding: EdgeInsets.only(left: 16, top: 24, bottom: 12),
             child: Text(

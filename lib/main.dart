@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bitirme_app/pages/home_page.dart';
+import 'package:bitirme_app/pages/first_page.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

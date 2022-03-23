@@ -1,11 +1,11 @@
+import 'package:bitirme_app/pages/event_detail.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../firebase_login/auth_service.dart';
-import '../pages/home_page.dart';
-import 'event_click.dart';
+import '../model/auth_service.dart';
+import '../pages/first_page.dart';
 
 class myEvents extends StatefulWidget {
   const myEvents({
@@ -71,17 +71,17 @@ class _myEventsState extends State<myEvents> {
 
                           return GestureDetector(
                             onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => EventClick(
-                                  eventId: map!["eventId"],
-                                  eventDesc: map["eventDesc"],
-                                  eventDate: map["eventDate"],
-                                  eventTitle: map["eventTitle"],
-                                  eventImg: map["eventImg"],
-                                  eventPlat: map["eventPlat"],
-                                ),
-                              );
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => EventDetail(
+                                            eventDate: map!['eventDate'],
+                                            eventDesc: map['eventDesc'],
+                                            eventId: map['eventId'],
+                                            eventImg: map['eventImg'],
+                                            eventPlat: map['eventPlat'],
+                                            eventTitle: map['eventTitle'],
+                                          )));
                             },
                             child: Container(
                               margin: EdgeInsets.only(right: 16),

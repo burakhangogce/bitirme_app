@@ -1,9 +1,10 @@
+import 'package:bitirme_app/widgets/buttons.dart';
 import 'package:bitirme_app/widgets/network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../firebase_login/auth_service.dart';
+import '../model/auth_service.dart';
 
 class EventDetail extends StatefulWidget {
   final String eventId, eventDesc, eventTitle, eventImg, eventPlat;
@@ -141,9 +142,79 @@ class _EventDetailState extends State<EventDetail> {
                     children: <Widget>[
                       Row(
                         children: [
-                          _buildAddToCartButton(
-                              '', join == false ? 'Katıl' : 'İptal'),
-                          _buildAddToCartButton('', 'İletişime Geç'),
+                          Container(
+                            color: Colors.transparent,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 10.0),
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40.0)),
+                              onPressed: () {
+                                if (join == true) {
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(loggedInUser.uid)
+                                      .collection('events')
+                                      .doc(widget.eventId)
+                                      .update({
+                                    'join': false,
+                                  });
+                                  FirebaseFirestore.instance
+                                      .collection('events')
+                                      .doc(widget.eventId)
+                                      .collection('members')
+                                      .doc(loggedInUser.uid)
+                                      .set({
+                                    'join': false,
+                                  });
+                                } else if (join == false) {
+                                  FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(loggedInUser.uid)
+                                      .collection('events')
+                                      .doc(widget.eventId)
+                                      .set({
+                                    'eventDate': widget.eventDate,
+                                    'eventId': widget.eventId,
+                                    'eventDesc': widget.eventDesc,
+                                    'eventTitle': widget.eventTitle,
+                                    'eventImg': widget.eventImg,
+                                    'eventPlat': widget.eventPlat,
+                                    'join': true,
+                                  });
+                                  FirebaseFirestore.instance
+                                      .collection('events')
+                                      .doc(widget.eventId)
+                                      .collection('members')
+                                      .doc(loggedInUser.uid)
+                                      .set({
+                                    'memberId': loggedInUser.uid,
+                                    'join': true,
+                                  });
+                                }
+
+                                setState(() {
+                                  join = !join;
+                                });
+                                print(join);
+                              },
+                              child: Text(join == true ? 'İptal' : 'Katıl'),
+                              color: join == false
+                                  ? Colors.blue.shade900
+                                  : Colors.redAccent,
+                              textColor: Colors.white,
+                            ),
+                          ),
+                          buildAddToCartButton(
+                              'iptal',
+                              'İletişime Geç',
+                              loggedInUser.uid.toString(),
+                              widget.eventId,
+                              widget.eventDate,
+                              widget.eventDesc,
+                              widget.eventTitle,
+                              widget.eventPlat,
+                              widget.eventImg),
                         ],
                       ),
                     ],
@@ -152,7 +223,7 @@ class _EventDetailState extends State<EventDetail> {
                     height: 5.0,
                   ),
                   Text(
-                    "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam, ullam? Fuga doloremque repellendus aut sequi officiis dignissimos, enim assumenda tenetur reprehenderit quam error, accusamus ipsa? Officiis voluptatum sequi voluptas omnis. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam, ullam? Fuga doloremque repellendus aut sequi officiis dignissimos, enim assumenda tenetur reprehenderit quam error, accusamus ipsa? Officiis voluptatum sequi voluptas omnis.",
+                    widget.eventDesc,
                     textAlign: TextAlign.justify,
                   ),
                 ],
@@ -163,21 +234,4 @@ class _EventDetailState extends State<EventDetail> {
       ),
     );
   }
-}
-
-Widget _buildAddToCartButton(String kod, String title) {
-  return Expanded(
-    child: Container(
-      color: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      child: RaisedButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(40.0)),
-        onPressed: () {},
-        child: Text(title),
-        color: Colors.blue.shade900,
-        textColor: Colors.white,
-      ),
-    ),
-  );
 }

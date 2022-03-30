@@ -53,6 +53,9 @@ dependencies:
   google_fonts: ^2.1.0
   flutter_swiper_plus: ^2.0.4
   card_swiper: ^2.0.1
+  firebase_messaging: ^11.2.11
+  flutter_local_notifications: ^9.4.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

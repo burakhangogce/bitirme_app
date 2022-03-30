@@ -1,7 +1,9 @@
+import 'package:bitirme_app/pages/home_page.dart';
 import 'package:bitirme_app/widgets/buttons.dart';
 import 'package:bitirme_app/widgets/network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../model/auth_service.dart';
@@ -50,6 +52,18 @@ class _EventDetailState extends State<EventDetail> {
         .then((value) {
       join = value['join'] == null ? false : value['join'];
       setState(() {});
+    });
+  }
+
+  storeNotificationToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    FirebaseFirestore.instance
+        .collection('events')
+        .doc(widget.eventId)
+        .collection('members')
+        .doc(user!.uid)
+        .update({
+      'token': token,
     });
   }
 
@@ -137,6 +151,22 @@ class _EventDetailState extends State<EventDetail> {
                   SizedBox(
                     height: 5.0,
                   ),
+                  RaisedButton(onPressed: () {
+                    FirebaseFirestore.instance
+                        .collection("events")
+                        .doc(widget.eventId)
+                        .collection('members')
+                        .where('join', isEqualTo: true)
+                        .get()
+                        .then((querySnapshot) {
+                      querySnapshot.docs.forEach((result) {
+                        sendNotification(
+                            '${widget.eventTitle} etkinliği başladı!',
+                            '${widget.eventDesc}',
+                            result['token']);
+                      });
+                    });
+                  }),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -168,6 +198,8 @@ class _EventDetailState extends State<EventDetail> {
                                     'join': false,
                                   });
                                 } else if (join == false) {
+                                  storeNotificationToken();
+
                                   FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(loggedInUser.uid)

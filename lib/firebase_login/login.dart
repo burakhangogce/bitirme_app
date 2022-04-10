@@ -1,4 +1,5 @@
 import 'package:bitirme_app/firebase_login/register.dart';
+import 'package:bitirme_app/pages/first_page.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -213,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((uid) => {
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => MyProfile())),
+                    MaterialPageRoute(builder: (context) => HomeScreen())),
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text("Başarılı"),
                 )),

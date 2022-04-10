@@ -1,6 +1,8 @@
 import 'package:bitirme_app/model/auth_service.dart';
 import 'package:bitirme_app/pages/home_page.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
+import 'package:bitirme_app/widgets/org_all_chat.dart';
+import 'package:bitirme_app/widgets/user_all_chat.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,7 +48,7 @@ var mPopularDestinationSubtitleStyle = GoogleFonts.inter(
 
 // Style for Travlog Section
 var mTravlogTitleStyle = GoogleFonts.inter(
-    fontSize: 14, fontWeight: FontWeight.w900, color: mFillColor);
+    fontSize: 13, fontWeight: FontWeight.w700, color: mFillColor);
 var mTravlogContentStyle = GoogleFonts.inter(
     fontSize: 10, fontWeight: FontWeight.w500, color: mTitleColor);
 var mTravlogPlaceStyle = GoogleFonts.inter(
@@ -95,7 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return FirstPage();
         break;
       case 1:
-        return Container();
+        return loggedInUser.userType == "organization"
+            ? OrgAllChats()
+            : UserAllChats();
         break;
       case 2:
         return Container();
@@ -120,10 +124,11 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: mBackgroundColor,
         title: SvgPicture.asset('assets/svg/appname.svg'),
         elevation: 0,
+        toolbarHeight: _page != 0 ? 0 : 50,
       ),
 
       // Setting up Background Color
-      backgroundColor: mBackgroundColor,
+      backgroundColor: Colors.white,
 
       // Setting up Custom Bottom Navigation Bar
       bottomNavigationBar: BottomNavigationBar(

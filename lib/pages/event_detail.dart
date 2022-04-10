@@ -9,8 +9,15 @@ import 'package:flutter/material.dart';
 import '../model/auth_service.dart';
 
 class EventDetail extends StatefulWidget {
-  final String eventId, eventDesc, eventTitle, eventImg, eventPlat;
+  final String eventId,
+      eventDesc,
+      eventTitle,
+      eventImg,
+      eventPlat,
+      eventOrg,
+      eventSubject;
   final Timestamp eventDate;
+  final int eventTime;
 
   const EventDetail(
       {Key? key,
@@ -19,7 +26,10 @@ class EventDetail extends StatefulWidget {
       required this.eventDate,
       required this.eventTitle,
       required this.eventPlat,
-      required this.eventImg})
+      required this.eventImg,
+      required this.eventTime,
+      required this.eventOrg,
+      required this.eventSubject})
       : super(key: key);
 
   @override
@@ -103,7 +113,7 @@ class _EventDetailState extends State<EventDetail> {
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
             Padding(
@@ -115,7 +125,7 @@ class _EventDetailState extends State<EventDetail> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: Text("Oct 21, 2017"),
+                        child: Text(widget.eventOrg),
                       ),
                       IconButton(
                         icon: Icon(Icons.share),
@@ -161,7 +171,7 @@ class _EventDetailState extends State<EventDetail> {
                         .then((querySnapshot) {
                       querySnapshot.docs.forEach((result) {
                         sendNotification(
-                            '${widget.eventTitle} etkinliği başladı!',
+                            '${widget.eventTitle} etkinliği başladı! ${loggedInUser.username}',
                             '${widget.eventDesc}',
                             result['token']);
                       });
@@ -212,6 +222,8 @@ class _EventDetailState extends State<EventDetail> {
                                     'eventTitle': widget.eventTitle,
                                     'eventImg': widget.eventImg,
                                     'eventPlat': widget.eventPlat,
+                                    'eventTime': widget.eventTime,
+                                    'eventSubject': widget.eventSubject,
                                     'join': true,
                                   });
                                   FirebaseFirestore.instance
@@ -246,7 +258,9 @@ class _EventDetailState extends State<EventDetail> {
                               widget.eventDesc,
                               widget.eventTitle,
                               widget.eventPlat,
-                              widget.eventImg),
+                              widget.eventImg,
+                              widget.eventTime,
+                              widget.eventSubject),
                         ],
                       ),
                     ],

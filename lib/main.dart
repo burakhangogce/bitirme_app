@@ -35,9 +35,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      color: Colors.white,
       key: _scaffoldKey,
       debugShowCheckedModeBanner: false,
-      theme: Get.isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: firstControl(),
     );
   }

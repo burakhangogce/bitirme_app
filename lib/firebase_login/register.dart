@@ -1,4 +1,5 @@
 import 'package:bitirme_app/firebase_login/login.dart';
+import 'package:bitirme_app/pages/first_page.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -292,8 +293,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         .doc(user.uid)
         .set(userModel.toMap());
 
-    Navigator.pushAndRemoveUntil((context),
-        MaterialPageRoute(builder: (context) => MyProfile()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        (context),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (route) => false);
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text("Başarılı"),
     ));

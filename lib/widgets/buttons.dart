@@ -10,7 +10,9 @@ Widget buildAddToCartButton(
     String eventDesc,
     String eventTitle,
     String eventPlat,
-    String eventImg) {
+    String eventImg,
+    int eventTime,
+    String eventSubject) {
   return Container(
     color: Colors.transparent,
     padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),

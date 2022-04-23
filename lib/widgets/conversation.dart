@@ -43,12 +43,23 @@ class _ConversationState extends State<Conversation> {
     print('kullanıcı id');
     print(loggedInUser.uid);
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('chats')
-            .doc(widget.uid)
-            .collection('messages')
-            .orderBy('timeStamp', descending: true)
-            .snapshots(),
+        stream: loggedInUser.userType == 'organization'
+            ? FirebaseFirestore.instance
+                .collection('chats')
+                .doc(widget.uid)
+                .collection('UserChats')
+                .doc(loggedInUser.uid)
+                .collection('messages')
+                .orderBy('timeStamp', descending: true)
+                .snapshots()
+            : FirebaseFirestore.instance
+                .collection('chats')
+                .doc(loggedInUser.uid)
+                .collection('UserChats')
+                .doc(widget.uid)
+                .collection('messages')
+                .orderBy('timeStamp', descending: true)
+                .snapshots(),
         builder: (context, snapshot) {
           final QuerySnapshot<Object?>? querySnapshot = snapshot.data;
 
@@ -62,7 +73,7 @@ class _ConversationState extends State<Conversation> {
 
                     bool isMe;
                     loggedInUser.userType == "organization"
-                        ? isMe = map!['id'] == widget.uid
+                        ? isMe = map!['id'] != widget.uid
                         : isMe = map!['id'] != widget.uid;
 
                     return Container(
@@ -70,12 +81,12 @@ class _ConversationState extends State<Conversation> {
                       child: Column(
                         children: [
                           Row(
-                            mainAxisAlignment: !isMe
+                            mainAxisAlignment: isMe
                                 ? MainAxisAlignment.end
                                 : MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              if (isMe)
+                              if (!isMe)
                                 CircleAvatar(
                                   radius: 15,
                                   backgroundImage: NetworkImage(map['image']),
@@ -90,21 +101,21 @@ class _ConversationState extends State<Conversation> {
                                         MediaQuery.of(context).size.width *
                                             0.6),
                                 decoration: BoxDecoration(
-                                    color: !isMe
+                                    color: isMe
                                         ? MyTheme.kAccentColor
                                         : Colors.grey[200],
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(16),
                                       topRight: Radius.circular(16),
                                       bottomLeft:
-                                          Radius.circular(!isMe ? 12 : 0),
+                                          Radius.circular(isMe ? 12 : 0),
                                       bottomRight:
-                                          Radius.circular(!isMe ? 0 : 12),
+                                          Radius.circular(isMe ? 0 : 12),
                                     )),
                                 child: Text(
                                   map['text'],
                                   style: MyTheme.bodyTextMessage.copyWith(
-                                      color: isMe
+                                      color: !isMe
                                           ? Colors.grey[800]
                                           : Colors.grey[800]),
                                 ),
@@ -114,7 +125,7 @@ class _ConversationState extends State<Conversation> {
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: Row(
-                              mainAxisAlignment: !isMe
+                              mainAxisAlignment: isMe
                                   ? MainAxisAlignment.end
                                   : MainAxisAlignment.start,
                               children: [
@@ -122,18 +133,6 @@ class _ConversationState extends State<Conversation> {
                                   SizedBox(
                                     width: 40,
                                   ),
-                                index == 0
-                                    ? Icon(
-                                        Icons.done_all,
-                                        size: 20,
-                                        color: widget.unreadCount != 0
-                                            ? MyTheme.bodyTextTime.color
-                                            : Colors.green,
-                                      )
-                                    : SizedBox(),
-                                SizedBox(
-                                  width: 8,
-                                ),
                                 Text(
                                   map['time'],
                                   style: MyTheme.bodyTextTime,

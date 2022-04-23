@@ -79,6 +79,8 @@ class _myEventsState extends State<myEvents> {
                                             eventTitle: map['eventTitle'],
                                             eventSubject: map['eventSubject'],
                                             eventTime: map['eventTime'],
+                                            eventOrgId: map['eventOrgId'],
+                                            eventOrgImg: map['eventOrgImg'],
                                           )));
                             },
                             child: Container(

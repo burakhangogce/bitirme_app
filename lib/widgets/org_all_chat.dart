@@ -53,7 +53,7 @@ class _OrgAllChatsState extends State<OrgAllChats> {
                 child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('chats')
-                        .where('uid', isEqualTo: loggedInUser.uid)
+                        .where('toId', isEqualTo: loggedInUser.uid)
                         .snapshots(),
                     builder: (context, snapshot) {
                       final QuerySnapshot<Object?>? querySnapshot =
@@ -77,9 +77,10 @@ class _OrgAllChatsState extends State<OrgAllChats> {
                                         uimage: map['uImage'],
                                         name: map['uName'],
                                         uid: loggedInUser.uid.toString(),
-                                        unreadCount: map['toUnreadCount'],
+                                        unreadCount: map['uUnreadCount'],
                                         userType:
                                             loggedInUser.userType.toString(),
+                                        orgId: map['toId'],
                                       );
                                     }));
                                     if (loggedInUser.userType ==

@@ -10,7 +10,7 @@ import 'chat_room.dart';
 import 'chat_room.dart';
 
 class ChatRoom extends StatefulWidget {
-  final String name, image, uid, chatId, uimage, userType;
+  final String name, image, uid, chatId, uimage, userType, orgId;
   final int unreadCount;
 
   const ChatRoom(
@@ -20,6 +20,7 @@ class ChatRoom extends StatefulWidget {
       required this.uimage,
       required this.uid,
       required this.chatId,
+      required this.orgId,
       required this.unreadCount,
       required this.userType})
       : super(key: key);
@@ -57,7 +58,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       Text(
                         widget.name,
                         style: TextStyle(
-                            fontSize: 28,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.white),
                       ),
@@ -119,8 +120,8 @@ class _ChatRoomState extends State<ChatRoom> {
                 ),
               ),
             ),
-            buildChatComposer(
-                widget.uid, widget.chatId, widget.image, widget.userType)
+            buildChatComposer(widget.uid, widget.chatId, widget.image,
+                widget.userType, widget.orgId)
           ],
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:bitirme_app/widgets/theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-Container buildChatComposer(String uid, chatid, image, userType) {
+Container buildChatComposer(String uid, chatid, image, userType, orgId) {
   TextEditingController textController = TextEditingController();
 
   return Container(
@@ -48,38 +48,57 @@ Container buildChatComposer(String uid, chatid, image, userType) {
         GestureDetector(
           onTap: () {
             if (textController.text != "") {
-              FirebaseFirestore.instance
-                  .collection('chats')
-                  .doc(chatid)
-                  .collection('messages')
-                  .add({
-                'text': textController.text.toString(),
-                'time': '${DateTime.now().hour} : ${DateTime.now().minute}',
-                'timeStamp': Timestamp.now(),
-                'image': image,
-                'id': uid
-              });
               if (userType == 'organization') {
                 FirebaseFirestore.instance
                     .collection('chats')
                     .doc(chatid)
-                    .update({
-                  'toUnreadCount': FieldValue.increment(1),
-                  'toText': textController.text.toString(),
-                  'chatTime':
-                      '${DateTime.now().hour} : ${DateTime.now().minute}',
-                  'uUnreadCount': 0,
+                    .collection('UserChats')
+                    .doc(orgId)
+                    .collection('messages')
+                    .add({
+                  'text': textController.text.toString(),
+                  'time': '${DateTime.now().hour} : ${DateTime.now().minute}',
+                  'timeStamp': Timestamp.now(),
+                  'image': image,
+                  'id': uid
                 });
-              } else {
                 FirebaseFirestore.instance
                     .collection('chats')
                     .doc(chatid)
+                    .collection('UserChats')
+                    .doc(orgId)
                     .update({
                   'uUnreadCount': FieldValue.increment(1),
                   'uText': textController.text.toString(),
                   'chatTime':
                       '${DateTime.now().hour} : ${DateTime.now().minute}',
                   'toUnreadCount': 0,
+                });
+              } else {
+                FirebaseFirestore.instance
+                    .collection('chats')
+                    .doc(uid)
+                    .collection('UserChats')
+                    .doc(orgId)
+                    .collection('messages')
+                    .add({
+                  'text': textController.text.toString(),
+                  'time': '${DateTime.now().hour} : ${DateTime.now().minute}',
+                  'timeStamp': Timestamp.now(),
+                  'image': image,
+                  'id': uid
+                });
+                FirebaseFirestore.instance
+                    .collection('chats')
+                    .doc(uid)
+                    .collection('UserChats')
+                    .doc(orgId)
+                    .update({
+                  'toUnreadCount': FieldValue.increment(1),
+                  'toText': textController.text.toString(),
+                  'chatTime':
+                      '${DateTime.now().hour} : ${DateTime.now().minute}',
+                  'uUnreadCount': 0,
                 });
               }
             }

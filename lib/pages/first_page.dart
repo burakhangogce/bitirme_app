@@ -143,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: _page == 1
                   ? new SvgPicture.asset('assets/icons/order_colored.svg')
                   : new SvgPicture.asset('assets/icons/order.svg'),
-              label: 'My Order'),
+              label: 'Chat'),
           BottomNavigationBarItem(
               icon: _page == 2
                   ? new SvgPicture.asset('assets/icons/watch_colored.svg')

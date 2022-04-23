@@ -53,6 +53,8 @@ class _UserAllChatsState extends State<UserAllChats> {
                 child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('chats')
+                        .doc(loggedInUser.uid)
+                        .collection('UserChats')
                         .where('uid', isEqualTo: loggedInUser.uid)
                         .snapshots(),
                     builder: (context, snapshot) {
@@ -72,14 +74,21 @@ class _UserAllChatsState extends State<UserAllChats> {
                                     Navigator.push(context,
                                         CupertinoPageRoute(builder: (context) {
                                       return ChatRoom(
-                                        chatId: map!['chatId'],
+                                        chatId: loggedInUser.userType ==
+                                                'organization'
+                                            ? map!['uId']
+                                            : map!['toId'],
                                         image: map['uImage'],
                                         uimage: map['toImage'],
                                         name: map['toName'],
                                         uid: loggedInUser.uid.toString(),
-                                        unreadCount: map['uUnreadCount'],
+                                        unreadCount: loggedInUser.userType ==
+                                                'organization'
+                                            ? map['uUnreadCount']
+                                            : map['toUnreadCount'],
                                         userType:
                                             loggedInUser.userType.toString(),
+                                        orgId: map['toId'],
                                       );
                                     }));
                                     if (loggedInUser.userType ==
@@ -102,7 +111,7 @@ class _UserAllChatsState extends State<UserAllChats> {
                                   child: _itemChats(
                                     avatar: 'assets/images/2.jpg',
                                     name: map!['toName'],
-                                    chat: map['toText'],
+                                    chat: map['uText'],
                                     time: map['chatTime'],
                                   ),
                                 );

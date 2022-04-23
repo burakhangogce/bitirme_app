@@ -1,9 +1,11 @@
 import 'package:bitirme_app/pages/home_page.dart';
+import 'package:bitirme_app/pages/organization_detail.dart';
 import 'package:bitirme_app/widgets/buttons.dart';
 import 'package:bitirme_app/widgets/network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../model/auth_service.dart';
@@ -15,6 +17,8 @@ class EventDetail extends StatefulWidget {
       eventImg,
       eventPlat,
       eventOrg,
+      eventOrgId,
+      eventOrgImg,
       eventSubject;
   final Timestamp eventDate;
   final int eventTime;
@@ -29,6 +33,8 @@ class EventDetail extends StatefulWidget {
       required this.eventImg,
       required this.eventTime,
       required this.eventOrg,
+      required this.eventOrgId,
+      required this.eventOrgImg,
       required this.eventSubject})
       : super(key: key);
 
@@ -125,7 +131,17 @@ class _EventDetailState extends State<EventDetail> {
                   Row(
                     children: <Widget>[
                       Expanded(
-                        child: Text(widget.eventOrg),
+                        child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return OrganizationDetail(
+                                  orgId: widget.eventOrgId,
+                                  orgImg: widget.eventOrgImg,
+                                );
+                              }));
+                            },
+                            child: Text(widget.eventOrg)),
                       ),
                       IconButton(
                         icon: Icon(Icons.share),

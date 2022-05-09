@@ -1,5 +1,3 @@
-import 'package:bitirme_app/pages/home_page.dart';
-import 'package:bitirme_app/pages/organization_detail.dart';
 import 'package:bitirme_app/widgets/buttons.dart';
 import 'package:bitirme_app/widgets/network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +6,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../model/auth_service.dart';
+import '../../model/auth_service.dart';
+import 'home_page.dart';
+import 'organization_detail.dart';
 
 class EventDetail extends StatefulWidget {
   final String eventId,
@@ -45,6 +45,7 @@ class EventDetail extends StatefulWidget {
 class _EventDetailState extends State<EventDetail> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
+
   bool join = false;
 
   @override

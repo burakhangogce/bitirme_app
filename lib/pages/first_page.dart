@@ -1,5 +1,7 @@
 import 'package:bitirme_app/model/auth_service.dart';
 import 'package:bitirme_app/pages/home_page.dart';
+import 'package:bitirme_app/pages/organization/home_organization.dart';
+import 'package:bitirme_app/pages/organization/profile_organization.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
 import 'package:bitirme_app/widgets/org_all_chat.dart';
 import 'package:bitirme_app/widgets/user_all_chat.dart';
@@ -94,7 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     switch (_page) {
       case 0:
-        return FirstPage();
+        return loggedInUser.userType == "organization"
+            ? OrganizationHome()
+            : FirstPage();
         break;
       case 1:
         return loggedInUser.userType == "organization"
@@ -105,7 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return Container();
         break;
       case 3:
-        return MyProfile();
+        return loggedInUser.userType == "organization"
+            ? ProfileOrganization()
+            : MyProfile();
         break;
     }
     return Container(

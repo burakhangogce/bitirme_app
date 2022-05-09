@@ -1,11 +1,9 @@
-import 'package:bitirme_app/pages/chat_room.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import '../widgets/chat_composer.dart';
-import '../widgets/conversation.dart';
-import '../widgets/theme.dart';
+import '../../widgets/chat_composer.dart';
+import '../../widgets/conversation.dart';
 import 'chat_room.dart';
 import 'chat_room.dart';
 

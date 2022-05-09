@@ -1,5 +1,4 @@
 import 'package:bitirme_app/firebase_login/login.dart';
-import 'package:bitirme_app/firebase_login/register_organization.dart';
 import 'package:bitirme_app/pages/first_page.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,14 +7,16 @@ import 'package:flutter/material.dart';
 
 import '../model/auth_service.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+class RegistrationOrganizationScreen extends StatefulWidget {
+  const RegistrationOrganizationScreen({Key? key}) : super(key: key);
 
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _RegistrationOrganizationScreenState createState() =>
+      _RegistrationOrganizationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _RegistrationOrganizationScreenState
+    extends State<RegistrationOrganizationScreen> {
   final _auth = FirebaseAuth.instance;
 
   // our form key
@@ -39,10 +40,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         validator: (value) {
           RegExp regex = new RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
-            return ("Kullanıcı adı boş geçilemez");
+            return ("Organizasyon adı boş geçilemez");
           }
           if (!regex.hasMatch(value)) {
-            return ("Geçerli kullanıcı adı girin(Min. 3 Karakter)");
+            return ("Geçerli organizasyon adı girin(Min. 3 Karakter)");
           }
           return null;
         },
@@ -53,7 +54,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.account_circle),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Kullanıcı adı",
+          hintText: "Organizasyon adı",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -226,17 +227,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           Column(
                             children: [
                               Text(
-                                  "Bir organizasyon hesabı mı oluşturmak istiyorsunuz?"),
+                                  "Bir kullanıcı hesabı mı oluşturmak istiyorsunuz?"),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegistrationOrganizationScreen()));
+                                          builder: (context) => LoginScreen()));
                                 },
                                 child: Text(
-                                  "Organizasyon hesabı oluştur",
+                                  "Kullanıcı hesabı oluştur",
                                   style: TextStyle(
                                       color: Colors.redAccent,
                                       fontWeight: FontWeight.bold,
@@ -306,7 +306,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         uid: user.uid,
         username: firstNameEditingController.text,
         timestamp: Timestamp.now(),
-        userType: "Standart");
+        userType: "organization");
 
     // writing all the values
     userModel.email = user.email!;
@@ -314,12 +314,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.username = firstNameEditingController.text;
 
     userModel.timestamp = Timestamp.now();
-    userModel.userType = "free";
+    userModel.userType = "organization";
 
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
+
+    FirebaseFirestore.instance.collection('organizations').doc(user.uid).set({
+      'orgImg': "",
+      'email': user.email,
+      'orgId': user.uid,
+      'orgDesc': '',
+      'orgTitle': firstNameEditingController.text
+    });
 
     Navigator.pushAndRemoveUntil(
         (context),

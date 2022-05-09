@@ -1,16 +1,20 @@
-import 'dart:core';
-import 'dart:core';
+// ignore_for_file: deprecated_member_use, prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
 
+import 'dart:core';
+import 'dart:core';
+import 'package:flutter_svg/svg.dart';
 import 'package:bitirme_app/model/auth_service.dart';
 import 'package:bitirme_app/firebase_login/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
+import '../pages/first_page.dart';
 import 'package:intl/intl.dart';
 
 Color kAppPrimaryColor = Colors.grey.shade200;
@@ -114,155 +118,357 @@ class _MyProfileState extends State<MyProfile> {
     String _copy =
         "https://play.google.com/store/apps/details?id=bukhantech.algoritmik_fikir_quiz";
     final key = new GlobalKey<ScaffoldState>();
-
-    return Stack(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 25, right: 25, top: 10),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 30,
-              ),
-              Container(
-                width: 150,
-                height: 150,
-                padding: EdgeInsets.all(8),
-                child: Container(
-                  padding: EdgeInsets.all(3),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('images/birdcanta.png'),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        titleSpacing: 0.0,
+        title: Text(
+          "Hoşgeldin ${loggedInUser.username} ",
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: GestureDetector(
+          onTap: () {/* Write listener code here */},
+          child: Icon(
+            Icons.arrow_back, // add custom icons also
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () => {
+              logout(context),
+            },
+            icon: Icon(Icons.logout),
+            color: Colors.red,
+          ),
+        ],
+      ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Divider(
+              color: Color.fromARGB(255, 214, 205, 205),
+              height: 50,
+              thickness: 1,
+            ),
+            Row(
+              children: <Widget>[
+                Center(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Profil Fotoğrafı',
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Text(
-                '${loggedInUser.username}',
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                    fontFamily: "Poppins"),
-              ),
-              Text(
-                'BİZİ TAKİP ET!',
-                style:
-                    TextStyle(fontWeight: FontWeight.w300, color: Colors.black),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              SocialIcons(),
-              SizedBox(height: 15),
-              Expanded(
-                child: ListView(
+                Spacer(),
+                Container(
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 20),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage:
+                          NetworkImage('https://via.placeholder.com/140x100'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Color.fromARGB(255, 214, 205, 205),
+              height: 50,
+              thickness: 1,
+            ),
+            Row(
+              children: <Widget>[
+                Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Kullanıcı Adı',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 20),
+                        child: Text(
+                          'Mahirella',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Color.fromARGB(255, 214, 205, 205),
+              height: 50,
+              thickness: 1,
+            ),
+            Row(
+              children: <Widget>[
+                Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'E-Posta Adresim',
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      child: Padding(
+                        padding: EdgeInsets.only(right: 20),
+                        child: Text(
+                          'mahirdeneme1@gmail.com',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Color.fromARGB(255, 214, 205, 205),
+              height: 50,
+              thickness: 1,
+            ),
+            Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {},
-                      child: ProfileListItem(
-                        icon: LineAwesomeIcons.bell,
-                        text: 'Bildirimler',
-                      ),
-                    ),
-                    GestureDetector(
                       onTap: () {
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(loggedInUser.uid)
-                            .get()
-                            .then((value) {
-                          // show the dialog
-                          String startDate = value['subStartDate'];
-
-                          showDialog(
-                            context: this.context,
-                            builder: (dialogContext) {
-                              return AlertDialog(
-                                title: Text("BİLGİ"),
-                                content: loggedInUser.userType == "free"
-                                    ? Text(
-                                        "Herhangi bir pakete sahip değilsiniz. Bir sorun olduğunu düşünüyorsanız bizimle iletişime geçiniz.")
-                                    : Text(
-                                        "Premium pakete sahipsiniz.\nPaket başlangıç tarihi: $startDate"),
-                                actions: [
-                                  loggedInUser.userType == "free"
-                                      ? TextButton(
-                                          child: Text("Satın Al"),
-                                          onPressed: () {
-                                            launch(
-                                                'https://www.shopier.com/ShowProductNew/storefront.php?shop=algoritmikfikir&sid=dzFWRDQzcHBGOE01S2U2aDBfLTFfIF8g');
-                                          },
-                                        )
-                                      : Container(),
-                                  TextButton(
-                                    child: Text("Tamam"),
-                                    onPressed: () {
-                                      Navigator.pop(dialogContext);
-                                    },
+                        print("Tapped a Container");
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 8),
+                        padding: EdgeInsets.only(left: 8),
+                        height: 64,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        decoration: BoxDecoration(
+                          color: mFillColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: mBorderColor, width: 1),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.notifications,
+                              color: Colors.indigo,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Bildirimler',
+                                    style: mServiceTitleStyle,
                                   ),
                                 ],
-                              );
-                            },
-                          );
-                        });
-                      },
-                      child: ProfileListItem(
-                        icon: LineAwesomeIcons.history,
-                        text: 'Abonelik bilgilerim',
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        launch('https://www.instagram.com/algoritmikfikir/');
-                      },
-                      child: ProfileListItem(
-                        icon: LineAwesomeIcons.question_circle,
-                        text: 'Yardım & Destek',
+                    Container(
+                      margin: EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.only(left: 8),
+                      height: 64,
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      decoration: BoxDecoration(
+                        color: mFillColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: mBorderColor, width: 1),
                       ),
-                    ),
-                    ProfileListItem(
-                      icon: LineAwesomeIcons.cog,
-                      text: 'Ayarlar',
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: ProfileListItem(
-                        icon: LineAwesomeIcons.columns,
-                        text: 'tema',
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.question_mark, color: Colors.indigo),
+                          Padding(
+                            padding: EdgeInsets.only(left: 11),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Yardım ve Destek',
+                                  style: mServiceTitleStyle,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Clipboard.setData(new ClipboardData(text: _copy));
-                        key.currentState!.showSnackBar(SnackBar(
-                          content: new Text("Davet linki kopyalandı!"),
-                        ));
-                      },
-                      child: ProfileListItem(
-                        icon: LineAwesomeIcons.user_plus,
-                        text: 'Davet et!',
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        logout(context);
-                      },
-                      child: ProfileListItem(
-                        icon: LineAwesomeIcons.alternate_sign_out,
-                        text: 'Çıkış',
-                        hasNavigation: false,
-                      ),
-                    ),
+                    )
                   ],
                 ),
-              ),
-            ],
-          ),
-        )
-      ],
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      margin: EdgeInsets.only(right: 8),
+                      padding: EdgeInsets.only(left: 8),
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: mFillColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: mBorderColor, width: 1),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.settings, color: Colors.indigo),
+                          Padding(
+                            padding: EdgeInsets.only(left: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Ayarlar',
+                                  style: mServiceTitleStyle,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      margin: EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.only(left: 8),
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: mFillColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: mBorderColor, width: 1),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.info, color: Colors.indigo),
+                          Padding(
+                            padding: EdgeInsets.only(left: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Bilgilerim',
+                                  style: mServiceTitleStyle,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      margin: EdgeInsets.only(right: 8),
+                      padding: EdgeInsets.only(left: 8),
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: mFillColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: mBorderColor, width: 1),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.message_rounded, color: Colors.indigo),
+                          Padding(
+                            padding: EdgeInsets.only(left: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Mesajlarım',
+                                  style: mServiceTitleStyle,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      margin: EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.only(left: 8),
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: mFillColor,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: mBorderColor, width: 1),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.person_add, color: Colors.indigo),
+                          Padding(
+                            padding: EdgeInsets.only(left: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Davet et!',
+                                  style: mServiceTitleStyle,
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 

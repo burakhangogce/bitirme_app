@@ -1,6 +1,11 @@
 import 'package:bitirme_app/model/auth_service.dart';
+import 'package:bitirme_app/pages/first_page.dart';
+import 'package:bitirme_app/pages/home_page.dart';
+import 'package:bitirme_app/widgets/org_all_chat.dart';
+import 'package:bitirme_app/widgets/user_all_chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -26,16 +31,17 @@ class _OrganizationDetailState extends State<OrganizationDetail> {
   String uImg = '';
   @override
   void initState() {
-    setState(() {
-      FirebaseFirestore.instance
-          .collection('organizations')
-          .doc(widget.orgId)
-          .get()
-          .then((value) => {
-                orgTitle = value['orgTitle'],
-                orgDesc = value['orgDesc'],
-              });
-    });
+    FirebaseFirestore.instance
+        .collection('organizations')
+        .doc(widget.orgId)
+        .get()
+        .then((value) => {
+              setState(() {
+                orgTitle = value['orgTitle'];
+                orgDesc = value['orgDesc'];
+              })
+            });
+
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
@@ -61,7 +67,10 @@ class _OrganizationDetailState extends State<OrganizationDetail> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
-          brightness: Brightness.light,
+          title: Text(
+            orgTitle,
+            style: TextStyle(color: Colors.black87),
+          ),
           iconTheme: IconThemeData(color: Colors.black87),
         ),
         body: SingleChildScrollView(
@@ -185,7 +194,12 @@ class _OrganizationDetailState extends State<OrganizationDetail> {
                                     '${DateTime.now().hour} : ${DateTime.now().minute}',
                               });
 
-                              print("exists");
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return HomeScreen(
+                                  page: 1,
+                                );
+                              }));
                             } else {
                               FirebaseFirestore.instance
                                   .collection('chats')
@@ -226,7 +240,12 @@ class _OrganizationDetailState extends State<OrganizationDetail> {
                                     '${DateTime.now().hour} : ${DateTime.now().minute}',
                               });
 
-                              print("doesnt exists");
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return HomeScreen(
+                                  page: 1,
+                                );
+                              }));
                             }
                           });
                         },
@@ -265,96 +284,22 @@ class _OrganizationDetailState extends State<OrganizationDetail> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 16,
+                ),
                 Text(
-                  "About",
+                  "Hakkında",
                   style: TextStyle(fontSize: 22),
                 ),
                 SizedBox(
                   height: 16,
                 ),
                 Text(
-                  "Dr. Stefeni Albert is a cardiologist in Nashville & affiliated with multiple hospitals in the  area.He received his medical degree from Duke University School of Medicine and has been in practice for more than 20 years. ",
+                  widget.orgImg,
                   style: TextStyle(color: Colors.grey, fontSize: 16),
                 ),
                 SizedBox(
                   height: 24,
-                ),
-                Row(
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Image.network(
-                              "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Google_Maps_icon_%282020%29.svg/1200px-Google_Maps_icon_%282020%29.svg.png",
-                              height: 30,
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "Address",
-                                  style: TextStyle(
-                                      color: Colors.black87.withOpacity(0.7),
-                                      fontSize: 20),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 268,
-                                    child: Text(
-                                      "House # 2, Road # 5, Green Road Dhanmondi, Dhaka, Bangladesh",
-                                      style: TextStyle(color: Colors.grey),
-                                    ))
-                              ],
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            FaIcon(FontAwesomeIcons.clock),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "Daily Practict",
-                                  style: TextStyle(
-                                      color: Colors.black87.withOpacity(0.7),
-                                      fontSize: 20),
-                                ),
-                                SizedBox(
-                                  height: 3,
-                                ),
-                                Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 268,
-                                    child: Text(
-                                      '''Monday - Friday
-Open till 7 Pm''',
-                                      style: TextStyle(color: Colors.grey),
-                                    ))
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                    Image.network(
-                      "https://repository-images.githubusercontent.com/205373971/def40d80-cb4c-11e9-971a-7434089990ed",
-                      width: 150,
-                    )
-                  ],
                 ),
               ],
             ),

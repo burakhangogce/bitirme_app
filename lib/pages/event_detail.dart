@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../model/auth_service.dart';
 import 'home_page.dart';
@@ -19,9 +20,9 @@ class EventDetail extends StatefulWidget {
       eventOrg,
       eventOrgId,
       eventOrgImg,
+      eventDuration,
       eventSubject;
   final Timestamp eventDate;
-  final int eventTime;
 
   const EventDetail(
       {Key? key,
@@ -31,7 +32,7 @@ class EventDetail extends StatefulWidget {
       required this.eventTitle,
       required this.eventPlat,
       required this.eventImg,
-      required this.eventTime,
+      required this.eventDuration,
       required this.eventOrg,
       required this.eventOrgId,
       required this.eventOrgImg,
@@ -88,7 +89,7 @@ class _EventDetailState extends State<EventDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Article One'),
+        title: Text(widget.eventOrg),
         backgroundColor: Colors.blue.shade700,
       ),
       body: SingleChildScrollView(
@@ -108,16 +109,53 @@ class _EventDetailState extends State<EventDetail> {
                   left: 20.0,
                   right: 20.0,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Icon(
-                        Icons.slideshow,
-                        color: Colors.white,
+                      Row(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.clock,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            widget.eventDuration + "dk",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 10.0),
-                      Text(
-                        "Technology",
-                        style: TextStyle(color: Colors.white),
-                      )
+                      Row(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.calendarCheck,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "${widget.eventDate.toDate().day}/${widget.eventDate.toDate().month}/${widget.eventDate.toDate().year}",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.slideshow,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            widget.eventSubject,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -151,7 +189,7 @@ class _EventDetailState extends State<EventDetail> {
                     ],
                   ),
                   Text(
-                    "Lorem ipsum dolor sit amet",
+                    widget.eventDesc,
                     style: TextStyle(color: Colors.black),
                   ),
                   Divider(),
@@ -178,22 +216,6 @@ class _EventDetailState extends State<EventDetail> {
                   SizedBox(
                     height: 5.0,
                   ),
-                  RaisedButton(onPressed: () {
-                    FirebaseFirestore.instance
-                        .collection("events")
-                        .doc(widget.eventId)
-                        .collection('members')
-                        .where('join', isEqualTo: true)
-                        .get()
-                        .then((querySnapshot) {
-                      querySnapshot.docs.forEach((result) {
-                        sendNotification(
-                            '${widget.eventTitle} etkinliği başladı! ${loggedInUser.username}',
-                            '${widget.eventDesc}',
-                            result['token']);
-                      });
-                    });
-                  }),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -209,48 +231,19 @@ class _EventDetailState extends State<EventDetail> {
                               onPressed: () {
                                 if (join == true) {
                                   FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(loggedInUser.uid)
                                       .collection('events')
                                       .doc(widget.eventId)
                                       .update({
-                                    'join': false,
-                                  });
-                                  FirebaseFirestore.instance
-                                      .collection('events')
-                                      .doc(widget.eventId)
-                                      .collection('members')
-                                      .doc(loggedInUser.uid)
-                                      .set({
-                                    'join': false,
+                                    'join ${loggedInUser.uid}': false,
                                   });
                                 } else if (join == false) {
                                   storeNotificationToken();
 
                                   FirebaseFirestore.instance
-                                      .collection('users')
-                                      .doc(loggedInUser.uid)
                                       .collection('events')
                                       .doc(widget.eventId)
-                                      .set({
-                                    'eventDate': widget.eventDate,
-                                    'eventId': widget.eventId,
-                                    'eventDesc': widget.eventDesc,
-                                    'eventTitle': widget.eventTitle,
-                                    'eventImg': widget.eventImg,
-                                    'eventPlat': widget.eventPlat,
-                                    'eventTime': widget.eventTime,
-                                    'eventSubject': widget.eventSubject,
-                                    'join': true,
-                                  });
-                                  FirebaseFirestore.instance
-                                      .collection('events')
-                                      .doc(widget.eventId)
-                                      .collection('members')
-                                      .doc(loggedInUser.uid)
-                                      .set({
-                                    'memberId': loggedInUser.uid,
-                                    'join': true,
+                                      .update({
+                                    'join ${loggedInUser.uid}': true,
                                   });
                                 }
 
@@ -276,7 +269,7 @@ class _EventDetailState extends State<EventDetail> {
                               widget.eventTitle,
                               widget.eventPlat,
                               widget.eventImg,
-                              widget.eventTime,
+                              widget.eventDuration,
                               widget.eventSubject),
                         ],
                       ),

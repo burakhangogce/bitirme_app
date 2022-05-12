@@ -18,7 +18,10 @@ class eventList extends StatelessWidget {
     return Container(
       height: 181,
       child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('events').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('events')
+              .where('eventStatus', isEqualTo: true)
+              .snapshots(),
           builder: (context, snapshot) {
             final QuerySnapshot<Object?>? querySnapshot = snapshot.data;
 
@@ -45,7 +48,7 @@ class eventList extends StatelessWidget {
                                         eventPlat: map['eventPlat'],
                                         eventTitle: map['eventTitle'],
                                         eventSubject: map['eventSubject'],
-                                        eventTime: map['eventTime'],
+                                        eventDuration: map['eventDuration'],
                                         eventOrgId: map["eventOrgId"],
                                         eventOrgImg: map['eventOrgImg'],
                                       )));
@@ -98,7 +101,7 @@ class eventList extends StatelessWidget {
                                             Container(
                                               margin: EdgeInsets.only(left: 5),
                                               child: Text(
-                                                map['eventSubject'],
+                                                map['eventCat'],
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.white,
@@ -180,7 +183,7 @@ class eventList extends StatelessWidget {
                                             Container(
                                               margin: EdgeInsets.only(left: 5),
                                               child: Text(
-                                                '${map['eventTime'].toString()} dk',
+                                                '${map['eventDuration'].toString()} dk',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.white,

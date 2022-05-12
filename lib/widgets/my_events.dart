@@ -41,10 +41,8 @@ class _myEventsState extends State<myEvents> {
       height: 181,
       child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('users')
-              .doc(loggedInUser.uid)
               .collection('events')
-              .where('join', isEqualTo: true)
+              .where('join ${loggedInUser.uid}', isEqualTo: true)
               .snapshots(),
           builder: (context, snapshot) {
             final QuerySnapshot<Object?>? querySnapshot = snapshot.data;
@@ -77,8 +75,8 @@ class _myEventsState extends State<myEvents> {
                                             eventImg: map['eventImg'],
                                             eventPlat: map['eventPlat'],
                                             eventTitle: map['eventTitle'],
-                                            eventSubject: map['eventSubject'],
-                                            eventTime: map['eventTime'],
+                                            eventSubject: map['eventCat'],
+                                            eventDuration: map['eventTime'],
                                             eventOrgId: map['eventOrgId'],
                                             eventOrgImg: map['eventOrgImg'],
                                           )));
@@ -134,7 +132,7 @@ class _myEventsState extends State<myEvents> {
                                                   margin:
                                                       EdgeInsets.only(left: 5),
                                                   child: Text(
-                                                    map['eventSubject'],
+                                                    map['eventCat'],
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         color: Colors.white,
@@ -218,7 +216,7 @@ class _myEventsState extends State<myEvents> {
                                                   margin:
                                                       EdgeInsets.only(left: 5),
                                                   child: Text(
-                                                    '${map['eventTime'].toString()} dk',
+                                                    '${map['eventDuration'].toString()} dk',
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         color: Colors.white,

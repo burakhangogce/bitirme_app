@@ -1,10 +1,11 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
-
 import 'dart:core';
 import 'dart:core';
+import 'package:bitirme_app/firebase_login/login_page.dart';
+import 'package:bitirme_app/pages/edit_photo.dart';
+import 'package:bitirme_app/pages/organization/edit_profile_organization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:bitirme_app/model/auth_service.dart';
-import 'package:bitirme_app/firebase_login/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,6 @@ class ProfileListItem extends StatelessWidget {
     required this.text,
     this.hasNavigation = true,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -99,10 +99,23 @@ class _MyProfileState extends State<MyProfile> {
   UserModel loggedInUser = UserModel();
 
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
+  String orgImgUrl = "", orgTitle = "", orgDesc = "";
 
   @override
   void initState() {
     super.initState();
+
+    FirebaseFirestore.instance
+        .collection('organizations')
+        .doc(user!.uid)
+        .get()
+        .then((value) => {
+              setState(() {
+                orgImgUrl = value['orgImg'];
+                orgTitle = value['orgTitle'];
+                orgDesc = value['orgDesc'];
+              }),
+            });
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
@@ -168,13 +181,60 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                 ),
                 Spacer(),
-                Container(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 20),
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundImage:
-                          NetworkImage('https://via.placeholder.com/140x100'),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        CupertinoPageRoute(builder: (context) {
+                      return EditPhoto();
+                    }));
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: 15),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 4,
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    color: Colors.black.withOpacity(0.1),
+                                    offset: Offset(0, 10))
+                              ],
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    orgImgUrl,
+                                  ))),
+                        ),
+                        Positioned(
+                            bottom: 0,
+                            right: 10,
+                            child: Container(
+                              height: 15,
+                              width: 15,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  width: 4,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                ),
+                                color: Colors.green,
+                              ),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.black,
+                              ),
+                            )),
+                      ],
                     ),
                   ),
                 ),
@@ -194,7 +254,7 @@ class _MyProfileState extends State<MyProfile> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text(
-                          'Kullanıcı Adı',
+                          'Organizasyon İsmi',
                         ),
                       ),
                     ),
@@ -204,13 +264,122 @@ class _MyProfileState extends State<MyProfile> {
                 Center(
                   child: Align(
                     alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (context) {
+                          return EditOrganizationProfilePage(
+                            orgTitle: orgTitle,
+                            orgImgUrl: orgImgUrl,
+                            orgDesc: orgDesc,
+                          );
+                        }));
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 40),
+                              child: Text(
+                                orgTitle,
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: 20,
+                              child: Container(
+                                height: 15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                  color: Colors.green,
+                                ),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              color: Color.fromARGB(255, 214, 205, 205),
+              height: 50,
+              thickness: 1,
+            ),
+            Row(
+              children: <Widget>[
+                Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
                     child: Container(
                       child: Padding(
-                        padding: EdgeInsets.only(right: 20),
+                        padding: EdgeInsets.only(left: 20),
                         child: Text(
-                          'Mahirella',
-                          style: TextStyle(color: Colors.grey),
+                          'Organizasyon Açıklaması',
                         ),
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(),
+                Center(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            CupertinoPageRoute(builder: (context) {
+                          return EditOrganizationProfilePage(
+                            orgTitle: orgTitle,
+                            orgImgUrl: orgImgUrl,
+                            orgDesc: orgDesc,
+                          );
+                        }));
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 40),
+                              child: Text(
+                                orgDesc,
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: 20,
+                              child: Container(
+                                height: 15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                  color: Colors.green,
+                                ),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.black,
+                                ),
+                              )),
+                        ],
                       ),
                     ),
                   ),
@@ -245,7 +414,7 @@ class _MyProfileState extends State<MyProfile> {
                       child: Padding(
                         padding: EdgeInsets.only(right: 20),
                         child: Text(
-                          'mahirdeneme1@gmail.com',
+                          user!.email.toString(),
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
@@ -474,8 +643,8 @@ class _MyProfileState extends State<MyProfile> {
 
   Future<void> logout(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreen()));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
 

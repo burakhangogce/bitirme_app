@@ -64,8 +64,9 @@ class _PopularSliderState extends State<PopularSlider> {
                                               eventImg: map['eventImg'],
                                               eventPlat: map['eventPlat'],
                                               eventTitle: map['eventTitle'],
-                                              eventSubject: map['eventSubject'],
-                                              eventTime: map['eventTime'],
+                                              eventSubject: map['eventCat'],
+                                              eventDuration:
+                                                  map['eventDuration'],
                                               eventOrgId: map['eventOrgId'],
                                               eventOrgImg: map['eventOrgImg'],
                                             )));

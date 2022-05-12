@@ -10,16 +10,16 @@ import 'package:path/path.dart' as path;
 import 'package:path/path.dart';
 import 'package:file_picker/file_picker.dart';
 
-import '../../model/auth_service.dart';
+import '../model/auth_service.dart';
 
-class ProfileOrganization extends StatefulWidget {
-  const ProfileOrganization({Key? key}) : super(key: key);
+class EditPhoto extends StatefulWidget {
+  const EditPhoto({Key? key}) : super(key: key);
 
   @override
-  State<ProfileOrganization> createState() => _ProfileOrganizationState();
+  State<EditPhoto> createState() => _EditPhotoState();
 }
 
-class _ProfileOrganizationState extends State<ProfileOrganization> {
+class _EditPhotoState extends State<EditPhoto> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
@@ -48,7 +48,7 @@ class _ProfileOrganizationState extends State<ProfileOrganization> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("MyApp.title"),
+        title: Text("Düzenle"),
         centerTitle: true,
       ),
       body: Container(
@@ -106,19 +106,27 @@ class _ProfileOrganizationState extends State<ProfileOrganization> {
     final urlDownload = await snapshot.ref.getDownloadURL();
 
     print('Download-Link: $urlDownload');
-
-    FirebaseFirestore.instance
-        .collection('organizations')
-        .doc(loggedInUser.uid)
-        .update({
-      'orgImg': urlDownload,
-    });
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(loggedInUser.uid)
-        .update({
-      'orgImg': urlDownload,
-    });
+    if (loggedInUser.userType == 'organization') {
+      FirebaseFirestore.instance
+          .collection('organizations')
+          .doc(loggedInUser.uid)
+          .update({
+        'orgImg': urlDownload,
+      });
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(loggedInUser.uid)
+          .update({
+        'orgImg': urlDownload,
+      });
+    } else {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(loggedInUser.uid)
+          .update({
+        'userImg': urlDownload,
+      });
+    }
   }
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(

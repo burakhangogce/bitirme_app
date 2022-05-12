@@ -4,7 +4,6 @@ import 'package:bitirme_app/model/auth_service.dart';
 import 'package:bitirme_app/pages/event_detail.dart';
 import 'package:bitirme_app/pages/first_page.dart';
 import 'package:bitirme_app/service/local_push_notification.dart';
-import 'package:bitirme_app/widgets/home_menu.dart';
 import 'package:bitirme_app/widgets/popular_slider.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -110,7 +109,6 @@ class _FirstPageState extends State<FirstPage> {
               style: mTitleStyle,
             ),
           ),
-          HomeMenu(),
           Container(
               height: 350,
               margin: EdgeInsets.only(top: 10),

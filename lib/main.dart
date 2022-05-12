@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bitirme_app/firebase_login/login_page.dart';
 import 'package:bitirme_app/pages/first_page.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
 import 'package:bitirme_app/service/local_push_notification.dart';
@@ -10,8 +11,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
-
-import 'firebase_login/login.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -54,10 +53,12 @@ class _firstControlState extends State<firstControl> {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      return HomeScreen();
+      return HomeScreen(
+        page: 0,
+      );
     } else {
       //If the user is not Logged-In.
-      return LoginScreen();
+      return LoginPage();
     }
   }
 }

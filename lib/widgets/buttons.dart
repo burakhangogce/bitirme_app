@@ -11,7 +11,7 @@ Widget buildAddToCartButton(
     String eventTitle,
     String eventPlat,
     String eventImg,
-    int eventTime,
+    String eventDuration,
     String eventSubject) {
   return Container(
     color: Colors.transparent,

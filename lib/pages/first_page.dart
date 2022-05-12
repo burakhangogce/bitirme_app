@@ -1,7 +1,7 @@
 import 'package:bitirme_app/model/auth_service.dart';
 import 'package:bitirme_app/pages/home_page.dart';
 import 'package:bitirme_app/pages/organization/home_organization.dart';
-import 'package:bitirme_app/pages/organization/profile_organization.dart';
+import 'package:bitirme_app/pages/edit_photo.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
 import 'package:bitirme_app/widgets/org_all_chat.dart';
 import 'package:bitirme_app/widgets/user_all_chat.dart';
@@ -57,6 +57,12 @@ var mTravlogPlaceStyle = GoogleFonts.inter(
     fontSize: 10, fontWeight: FontWeight.w500, color: mBlueColor);
 
 class HomeScreen extends StatefulWidget {
+  final int page;
+
+  const HomeScreen({
+    Key? key,
+    required this.page,
+  }) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -74,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-
+  int _page = 0;
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -87,9 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
       this.loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
+    _page = widget.page;
   }
-
-  int _page = 0;
 
   Widget bodyFunction() {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -109,9 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Container();
         break;
       case 3:
-        return loggedInUser.userType == "organization"
-            ? ProfileOrganization()
-            : MyProfile();
+        return MyProfile();
         break;
     }
     return Container(
@@ -143,13 +146,13 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: _page == 0
                 ? new SvgPicture.asset('assets/icons/home_colored.svg')
                 : new SvgPicture.asset('assets/icons/home.svg'),
-            label: 'Home',
+            label: 'Ana Sayfa',
           ),
           BottomNavigationBarItem(
               icon: _page == 1
                   ? new SvgPicture.asset('assets/icons/order_colored.svg')
                   : new SvgPicture.asset('assets/icons/order.svg'),
-              label: 'Chat'),
+              label: 'Sohbet'),
           BottomNavigationBarItem(
               icon: _page == 2
                   ? new SvgPicture.asset('assets/icons/watch_colored.svg')
@@ -159,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: _page == 3
                 ? new SvgPicture.asset('assets/icons/account_colored.svg')
                 : new SvgPicture.asset('assets/icons/account.svg'),
-            label: 'Account',
+            label: 'Profil',
           ),
         ],
         currentIndex: _page,

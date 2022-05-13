@@ -132,513 +132,525 @@ class _MyProfileState extends State<MyProfile> {
         "https://play.google.com/store/apps/details?id=bukhantech.algoritmik_fikir_quiz";
     final key = new GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0.0,
-        title: Text(
-          "Hoşgeldin ${loggedInUser.username} ",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {/* Write listener code here */},
-          child: Icon(
-            Icons.arrow_back, // add custom icons also
+        appBar: AppBar(
+          centerTitle: false,
+          titleSpacing: 0.0,
+          title: Text(
+            "Hoşgeldin ${loggedInUser.username} ",
+            style: TextStyle(color: Colors.black),
           ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => {
-              logout(context),
-            },
-            icon: Icon(Icons.logout),
-            color: Colors.red,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: GestureDetector(
+            onTap: () {/* Write listener code here */},
+            child: Icon(
+              Icons.arrow_back, // add custom icons also
+            ),
           ),
-        ],
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
-              height: 50,
-              thickness: 1,
-            ),
-            Row(
-              children: <Widget>[
-                Center(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'Profil Fotoğrafı',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(context,
-                        CupertinoPageRoute(builder: (context) {
-                      return EditPhoto();
-                    }));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 4,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor),
-                              boxShadow: [
-                                BoxShadow(
-                                    spreadRadius: 2,
-                                    blurRadius: 10,
-                                    color: Colors.black.withOpacity(0.1),
-                                    offset: Offset(0, 10))
-                              ],
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                    orgImgUrl,
-                                  ))),
-                        ),
-                        Positioned(
-                            bottom: 0,
-                            right: 10,
-                            child: Container(
-                              height: 15,
-                              width: 15,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  width: 4,
-                                  color:
-                                      Theme.of(context).scaffoldBackgroundColor,
-                                ),
-                                color: Colors.green,
-                              ),
-                              child: Icon(
-                                Icons.edit,
-                                color: Colors.black,
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
-              height: 50,
-              thickness: 1,
-            ),
-            Row(
-              children: <Widget>[
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'Organizasyon İsmi',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Spacer(),
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (context) {
-                          return EditOrganizationProfilePage(
-                            orgTitle: orgTitle,
-                            orgImgUrl: orgImgUrl,
-                            orgDesc: orgDesc,
-                          );
-                        }));
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 40),
-                              child: Text(
-                                orgTitle,
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              bottom: 0,
-                              right: 20,
-                              child: Container(
-                                height: 15,
-                                width: 15,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  color: Colors.green,
-                                ),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
-              height: 50,
-              thickness: 1,
-            ),
-            Row(
-              children: <Widget>[
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'Organizasyon Açıklaması',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Spacer(),
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (context) {
-                          return EditOrganizationProfilePage(
-                            orgTitle: orgTitle,
-                            orgImgUrl: orgImgUrl,
-                            orgDesc: orgDesc,
-                          );
-                        }));
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 40),
-                              child: Text(
-                                orgDesc,
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                              bottom: 0,
-                              right: 20,
-                              child: Container(
-                                height: 15,
-                                width: 15,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  color: Colors.green,
-                                ),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
-              height: 50,
-              thickness: 1,
-            ),
-            Row(
-              children: <Widget>[
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'E-Posta Adresim',
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Spacer(),
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: Text(
-                          user!.email.toString(),
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
-              height: 50,
-              thickness: 1,
-            ),
-            Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        print("Tapped a Container");
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(right: 8),
-                        padding: EdgeInsets.only(left: 8),
-                        height: 64,
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        decoration: BoxDecoration(
-                          color: mFillColor,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: mBorderColor, width: 1),
-                        ),
-                        child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.notifications,
-                              color: Colors.indigo,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    'Bildirimler',
-                                    style: mServiceTitleStyle,
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(left: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.question_mark, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 11),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Yardım ve Destek',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: EdgeInsets.only(right: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.settings, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Ayarlar',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: EdgeInsets.only(left: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.info, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Bilgilerim',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: EdgeInsets.only(right: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.message_rounded, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Mesajlarım',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: EdgeInsets.only(left: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.person_add, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Davet et!',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ],
+          actions: [
+            IconButton(
+              onPressed: () => {
+                logout(context),
+              },
+              icon: Icon(Icons.logout),
+              color: Colors.red,
             ),
           ],
         ),
-      ),
-    );
+        body: ListView(
+          children: [
+            Container(
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    color: Color.fromARGB(255, 214, 205, 205),
+                    height: 50,
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Center(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                'Profil Fotoğrafı',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (context) {
+                            return EditPhoto();
+                          }));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(right: 15),
+                          child: Stack(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 4,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          spreadRadius: 2,
+                                          blurRadius: 10,
+                                          color: Colors.black.withOpacity(0.1),
+                                          offset: Offset(0, 10))
+                                    ],
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(
+                                          orgImgUrl,
+                                        ))),
+                              ),
+                              Positioned(
+                                  bottom: 0,
+                                  right: 10,
+                                  child: Container(
+                                    height: 15,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        width: 4,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                      color: Colors.green,
+                                    ),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.black,
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: Color.fromARGB(255, 214, 205, 205),
+                    height: 50,
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                'Organizasyon İsmi',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return EditOrganizationProfilePage(
+                                  orgTitle: orgTitle,
+                                  orgImgUrl: orgImgUrl,
+                                  orgDesc: orgDesc,
+                                );
+                              }));
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 40),
+                                    child: Text(
+                                      orgTitle,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                    bottom: 0,
+                                    right: 20,
+                                    child: Container(
+                                      height: 15,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          width: 4,
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        ),
+                                        color: Colors.green,
+                                      ),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.black,
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: Color.fromARGB(255, 214, 205, 205),
+                    height: 50,
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                'Organizasyon Açıklaması',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return EditOrganizationProfilePage(
+                                  orgTitle: orgTitle,
+                                  orgImgUrl: orgImgUrl,
+                                  orgDesc: orgDesc,
+                                );
+                              }));
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 40),
+                                    child: Text(
+                                      orgDesc,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                    bottom: 0,
+                                    right: 20,
+                                    child: Container(
+                                      height: 15,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          width: 4,
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        ),
+                                        color: Colors.green,
+                                      ),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.black,
+                                      ),
+                                    )),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: Color.fromARGB(255, 214, 205, 205),
+                    height: 50,
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                'E-Posta Adresim',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 20),
+                              child: Text(
+                                user!.email.toString(),
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    color: Color.fromARGB(255, 214, 205, 205),
+                    height: 50,
+                    thickness: 1,
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              print("Tapped a Container");
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 8),
+                              padding: EdgeInsets.only(left: 8),
+                              height: 64,
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              decoration: BoxDecoration(
+                                color: mFillColor,
+                                borderRadius: BorderRadius.circular(12),
+                                border:
+                                    Border.all(color: mBorderColor, width: 1),
+                              ),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.notifications,
+                                    color: Colors.indigo,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          'Bildirimler',
+                                          style: mServiceTitleStyle,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 8),
+                            padding: EdgeInsets.only(left: 8),
+                            height: 64,
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            decoration: BoxDecoration(
+                              color: mFillColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: mBorderColor, width: 1),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.question_mark, color: Colors.indigo),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 11),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        'Yardım ve Destek',
+                                        style: mServiceTitleStyle,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            margin: EdgeInsets.only(right: 8),
+                            padding: EdgeInsets.only(left: 8),
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: mFillColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: mBorderColor, width: 1),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.settings, color: Colors.indigo),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        'Ayarlar',
+                                        style: mServiceTitleStyle,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            margin: EdgeInsets.only(left: 8),
+                            padding: EdgeInsets.only(left: 8),
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: mFillColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: mBorderColor, width: 1),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.info, color: Colors.indigo),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        'Bilgilerim',
+                                        style: mServiceTitleStyle,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            margin: EdgeInsets.only(right: 8),
+                            padding: EdgeInsets.only(left: 8),
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: mFillColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: mBorderColor, width: 1),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.message_rounded,
+                                    color: Colors.indigo),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        'Mesajlarım',
+                                        style: mServiceTitleStyle,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.45,
+                            margin: EdgeInsets.only(left: 8),
+                            padding: EdgeInsets.only(left: 8),
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: mFillColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: mBorderColor, width: 1),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(Icons.person_add, color: Colors.indigo),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        'Davet et!',
+                                        style: mServiceTitleStyle,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 
   Future<void> logout(BuildContext context) async {

@@ -8,16 +8,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../model/auth_service.dart';
 import '../pages/first_page.dart';
 
-class myEvents extends StatefulWidget {
-  const myEvents({
+class delayEventList extends StatefulWidget {
+  const delayEventList({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<myEvents> createState() => _myEventsState();
+  State<delayEventList> createState() => _delayEventListState();
 }
 
-class _myEventsState extends State<myEvents> {
+class _delayEventListState extends State<delayEventList> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
@@ -42,18 +42,18 @@ class _myEventsState extends State<myEvents> {
       child: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('events')
-              .where('join ${loggedInUser.uid}', isEqualTo: true)
+              .where('join ${user!.uid}', isEqualTo: true)
+              .where('eventTime', isLessThanOrEqualTo: Timestamp.now().toDate())
               .snapshots(),
           builder: (context, snapshot) {
             final QuerySnapshot<Object?>? querySnapshot = snapshot.data;
-
             return snapshot.data == null
                 ? Container()
                 : snapshot.data!.docs.length == 0
                     ? Container(
                         margin: EdgeInsets.only(left: 10, right: 10),
                         height: 50,
-                        child: Text("Henüz kayıt olduğun bir etkinliğin yok."),
+                        child: Text("Tarihi geçen bir etkinliğiniz yok."),
                       )
                     : ListView.builder(
                         padding: EdgeInsets.only(left: 16),
@@ -76,7 +76,7 @@ class _myEventsState extends State<myEvents> {
                                             eventPlat: map['eventPlat'],
                                             eventTitle: map['eventTitle'],
                                             eventSubject: map['eventCat'],
-                                            eventDuration: map['eventDuration'],
+                                            eventDuration: map['eventTime'],
                                             eventOrgId: map['eventOrgId'],
                                             eventOrgImg: map['eventOrgImg'],
                                           )));

@@ -47,7 +47,7 @@ class eventList extends StatelessWidget {
                                         eventImg: map['eventImg'],
                                         eventPlat: map['eventPlat'],
                                         eventTitle: map['eventTitle'],
-                                        eventSubject: map['eventSubject'],
+                                        eventSubject: map['eventCat'],
                                         eventDuration: map['eventDuration'],
                                         eventOrgId: map["eventOrgId"],
                                         eventOrgImg: map['eventOrgImg'],

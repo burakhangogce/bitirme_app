@@ -1,3 +1,4 @@
+import 'package:bitirme_app/widgets/delay_event.dart';
 import 'package:bitirme_app/widgets/event_list.dart';
 import 'package:bitirme_app/widgets/my_events.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class SimpleTab extends StatelessWidget {
             child: TabBarView(children: [
               myEvents(),
               eventList(),
-              Icon(Icons.games),
+              delayEventList(),
             ]),
           ),
         ));

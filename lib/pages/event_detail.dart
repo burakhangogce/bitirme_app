@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../model/auth_service.dart';
+import '../widgets/org_all_chat.dart';
+import 'first_page.dart';
 import 'home_page.dart';
 import 'organization_detail.dart';
 
@@ -48,6 +50,7 @@ class _EventDetailState extends State<EventDetail> {
   UserModel loggedInUser = UserModel();
 
   bool join = false;
+  String uImg = '';
 
   @override
   void initState() {
@@ -62,15 +65,27 @@ class _EventDetailState extends State<EventDetail> {
       setState(() {});
     });
     FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
         .collection('events')
         .doc(widget.eventId)
         .get()
         .then((value) {
-      join = value['join'] == null ? false : value['join'];
+      join = value['join ${user!.uid}'] == null
+          ? false
+          : value['join ${user!.uid}'];
       setState(() {});
     });
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      uImg = value['userImg'];
+      setState(() {});
+    });
+    print('join ${user!.uid}');
+    print(join);
   }
 
   storeNotificationToken() async {
@@ -102,7 +117,7 @@ class _EventDetailState extends State<EventDetail> {
                     width: double.infinity,
                     child: PNetworkImage(
                       widget.eventImg,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     )),
                 Positioned(
                   bottom: 20.0,
@@ -180,7 +195,19 @@ class _EventDetailState extends State<EventDetail> {
                                 );
                               }));
                             },
-                            child: Text(widget.eventOrg)),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 30,
+                                  child: Image.network(widget.eventOrgImg),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(widget.eventOrg),
+                              ],
+                            )),
                       ),
                       IconButton(
                         icon: Icon(Icons.share),
@@ -236,16 +263,33 @@ class _EventDetailState extends State<EventDetail> {
                                       .update({
                                     'join ${loggedInUser.uid}': false,
                                   });
+                                  FirebaseFirestore.instance
+                                      .collection('events')
+                                      .doc(widget.eventId)
+                                      .collection('members')
+                                      .doc(loggedInUser.uid)
+                                      .update({
+                                    'join ${loggedInUser.uid}': false,
+                                  });
                                 } else if (join == false) {
                                   storeNotificationToken();
-
                                   FirebaseFirestore.instance
                                       .collection('events')
                                       .doc(widget.eventId)
                                       .update({
                                     'join ${loggedInUser.uid}': true,
                                   });
+                                  FirebaseFirestore.instance
+                                      .collection('events')
+                                      .doc(widget.eventId)
+                                      .collection('members')
+                                      .doc(loggedInUser.uid)
+                                      .set({
+                                    'join ${loggedInUser.uid}': true,
+                                    'memberId': loggedInUser.uid,
+                                  });
                                 }
+                                storeNotificationToken();
 
                                 setState(() {
                                   join = !join;
@@ -259,18 +303,103 @@ class _EventDetailState extends State<EventDetail> {
                               textColor: Colors.white,
                             ),
                           ),
-                          buildAddToCartButton(
-                              'iptal',
-                              'İletişime Geç',
-                              loggedInUser.uid.toString(),
-                              widget.eventId,
-                              widget.eventDate,
-                              widget.eventDesc,
-                              widget.eventTitle,
-                              widget.eventPlat,
-                              widget.eventImg,
-                              widget.eventDuration,
-                              widget.eventSubject),
+                          Container(
+                            color: Colors.transparent,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 10.0),
+                            child: FlatButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40.0)),
+                              onPressed: () {
+                                FirebaseFirestore.instance
+                                    .collection("chats")
+                                    .doc(loggedInUser.uid)
+                                    .collection('UserChats')
+                                    .doc(widget.eventOrgId)
+                                    .get()
+                                    .then((doc) {
+                                  if (doc.exists) {
+                                    FirebaseFirestore.instance
+                                        .collection('chats')
+                                        .doc(loggedInUser.uid)
+                                        .collection('UserChats')
+                                        .doc(widget.eventOrgId)
+                                        .update({
+                                      'chatId': '${loggedInUser.uid}',
+                                      'toId': '${widget.eventOrgId}',
+                                      'toImage': '${widget.eventOrgImg}',
+                                      'toName': '${widget.eventOrg}',
+                                      'toText': ' ',
+                                      'uImage': '${uImg}',
+                                      'toUnreadCount': FieldValue.increment(1),
+                                      'uText': ' ',
+                                      'uName': '${loggedInUser.username}',
+                                      'uUnreadCount': FieldValue.increment(1),
+                                      'uid': loggedInUser.uid,
+                                      'chatTime':
+                                          '${DateTime.now().hour} : ${DateTime.now().minute}',
+                                    });
+
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (context) {
+                                      return HomeScreen(
+                                        page: 1,
+                                      );
+                                    }));
+                                  } else {
+                                    FirebaseFirestore.instance
+                                        .collection('chats')
+                                        .doc(loggedInUser.uid)
+                                        .set({
+                                      'chatId': '${loggedInUser.uid}',
+                                      'toId': '${widget.eventOrgId}',
+                                      'toImage': '${widget.eventOrgImg}',
+                                      'toName': '${widget.eventOrg}',
+                                      'toText': ' ',
+                                      'uImage': '${uImg}',
+                                      'toUnreadCount': FieldValue.increment(1),
+                                      'uText': ' ',
+                                      'uName': '${loggedInUser.username}',
+                                      'uUnreadCount': FieldValue.increment(1),
+                                      'uid': loggedInUser.uid,
+                                      'chatTime':
+                                          '${DateTime.now().hour} : ${DateTime.now().minute}',
+                                    });
+                                    FirebaseFirestore.instance
+                                        .collection('chats')
+                                        .doc(loggedInUser.uid)
+                                        .collection('UserChats')
+                                        .doc(widget.eventOrgId)
+                                        .set({
+                                      'chatId': '${loggedInUser.uid}',
+                                      'toId': '${widget.eventOrgId}',
+                                      'toImage': '${widget.eventOrgImg}',
+                                      'toName': '${widget.eventOrg}',
+                                      'toText': ' ',
+                                      'uImage': '${uImg}',
+                                      'toUnreadCount': FieldValue.increment(1),
+                                      'uText': ' ',
+                                      'uName': '${loggedInUser.username}',
+                                      'uUnreadCount': FieldValue.increment(1),
+                                      'uid': loggedInUser.uid,
+                                      'chatTime':
+                                          '${DateTime.now().hour} : ${DateTime.now().minute}',
+                                    });
+
+                                    Navigator.push(context,
+                                        CupertinoPageRoute(builder: (context) {
+                                      return HomeScreen(
+                                        page: 1,
+                                      );
+                                    }));
+                                  }
+                                });
+                              },
+                              child: Text('İletişime geç'),
+                              color: Colors.blue.shade900,
+                              textColor: Colors.white,
+                            ),
+                          ),
                         ],
                       ),
                     ],

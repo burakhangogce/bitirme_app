@@ -48,7 +48,7 @@ class _OrganizationDetailState extends State<OrganizationDetail> {
         .get()
         .then((value) {
       this.loggedInUser = UserModel.fromMap(value.data());
-      uImg = value['uImg'];
+      uImg = value['userImg'];
       setState(() {});
     });
     super.initState();

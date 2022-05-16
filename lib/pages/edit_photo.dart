@@ -117,7 +117,7 @@ class _EditPhotoState extends State<EditPhoto> {
           .collection('users')
           .doc(loggedInUser.uid)
           .update({
-        'orgImg': urlDownload,
+        'userImg': urlDownload,
       });
     } else {
       FirebaseFirestore.instance

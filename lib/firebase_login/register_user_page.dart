@@ -244,6 +244,10 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
+    FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      'userImg':
+          "https://upload.wikimedia.org/wikipedia/commons/7/70/User_icon_BLACK-01.png",
+    });
 
     Navigator.pushAndRemoveUntil(
         (context),

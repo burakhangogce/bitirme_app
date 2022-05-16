@@ -280,7 +280,6 @@ class _MyProfileState extends State<MyProfile> {
                               ),
                             ),
                           ),
-                          //mahir
                           loggedInUser.userType == 'organization'
                               ? Positioned(
                                   bottom: 0,

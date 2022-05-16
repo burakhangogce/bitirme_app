@@ -246,7 +246,7 @@ class _RegisterOrganizationPageState extends State<RegisterOrganizationPage> {
         .set(userModel.toMap());
 
     FirebaseFirestore.instance.collection('organizations').doc(user.uid).set({
-      'orgImg': "",
+      'orgImg': "http://cdn.onlinewebfonts.com/svg/img_242128.png",
       'email': user.email,
       'orgId': user.uid,
       'orgDesc': '',

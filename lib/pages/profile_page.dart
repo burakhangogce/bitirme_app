@@ -100,22 +100,35 @@ class _MyProfileState extends State<MyProfile> {
 
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
   String orgImgUrl = "", orgTitle = "", orgDesc = "";
+  String userImgUrl = "";
 
   @override
   void initState() {
     super.initState();
+    if (loggedInUser.userType == 'organization') {
+      FirebaseFirestore.instance
+          .collection('organizations')
+          .doc(user!.uid)
+          .get()
+          .then((value) => {
+                setState(() {
+                  orgImgUrl = value['orgImg'];
+                  orgTitle = value['orgTitle'];
+                  orgDesc = value['orgDesc'];
+                }),
+              });
+    } else {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user!.uid)
+          .get()
+          .then((value) => {
+                setState(() {
+                  userImgUrl = value['userImg'];
+                }),
+              });
+    }
 
-    FirebaseFirestore.instance
-        .collection('organizations')
-        .doc(user!.uid)
-        .get()
-        .then((value) => {
-              setState(() {
-                orgImgUrl = value['orgImg'];
-                orgTitle = value['orgTitle'];
-                orgDesc = value['orgDesc'];
-              }),
-            });
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
@@ -132,38 +145,11 @@ class _MyProfileState extends State<MyProfile> {
         "https://play.google.com/store/apps/details?id=bukhantech.algoritmik_fikir_quiz";
     final key = new GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0.0,
-        title: Text(
-          "Hoşgeldin ${loggedInUser.username} ",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {/* Write listener code here */},
-          child: Icon(
-            Icons.arrow_back, // add custom icons also
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () => {
-              logout(context),
-            },
-            icon: Icon(Icons.logout),
-            color: Colors.red,
-          ),
-        ],
-      ),
       body: Container(
         child: Column(
           children: <Widget>[
             Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
               height: 50,
-              thickness: 1,
             ),
             Row(
               children: <Widget>[
@@ -211,7 +197,9 @@ class _MyProfileState extends State<MyProfile> {
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                    orgImgUrl,
+                                    loggedInUser.userType == 'organization'
+                                        ? orgImgUrl
+                                        : userImgUrl,
                                   ))),
                         ),
                         Positioned(
@@ -254,7 +242,9 @@ class _MyProfileState extends State<MyProfile> {
                       child: Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text(
-                          'Organizasyon İsmi',
+                          loggedInUser.userType == 'organization'
+                              ? 'Organizasyon İsmi'
+                              : 'Kullanıcı ismi',
                         ),
                       ),
                     ),
@@ -266,14 +256,16 @@ class _MyProfileState extends State<MyProfile> {
                     alignment: Alignment.centerLeft,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (context) {
-                          return EditOrganizationProfilePage(
-                            orgTitle: orgTitle,
-                            orgImgUrl: orgImgUrl,
-                            orgDesc: orgDesc,
-                          );
-                        }));
+                        if (loggedInUser.userType == 'organization') {
+                          Navigator.push(context,
+                              CupertinoPageRoute(builder: (context) {
+                            return EditOrganizationProfilePage(
+                              orgTitle: orgTitle,
+                              orgImgUrl: orgImgUrl,
+                              orgDesc: orgDesc,
+                            );
+                          }));
+                        }
                       },
                       child: Stack(
                         children: [
@@ -281,31 +273,35 @@ class _MyProfileState extends State<MyProfile> {
                             child: Padding(
                               padding: EdgeInsets.only(right: 40),
                               child: Text(
-                                orgTitle,
+                                loggedInUser.userType == 'organization'
+                                    ? orgTitle.toString()
+                                    : loggedInUser.username.toString(),
                                 style: TextStyle(color: Colors.grey),
                               ),
                             ),
                           ),
-                          Positioned(
-                              bottom: 0,
-                              right: 20,
-                              child: Container(
-                                height: 15,
-                                width: 15,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  color: Colors.green,
-                                ),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                ),
-                              )),
+                          loggedInUser.userType == 'organization'
+                              ? Positioned(
+                                  bottom: 0,
+                                  right: 20,
+                                  child: Container(
+                                    height: 15,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        width: 4,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                      color: Colors.green,
+                                    ),
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: Colors.black,
+                                    ),
+                                  ))
+                              : Container(),
                         ],
                       ),
                     ),
@@ -314,82 +310,88 @@ class _MyProfileState extends State<MyProfile> {
               ],
             ),
             Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
-              height: 50,
-              thickness: 1,
+              color: loggedInUser.userType == 'organization'
+                  ? Color.fromARGB(255, 214, 205, 205)
+                  : Colors.transparent,
+              height: loggedInUser.userType == 'organization' ? 50 : 20,
+              thickness: loggedInUser.userType == 'organization' ? 1 : 0,
             ),
-            Row(
-              children: <Widget>[
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
-                          'Organizasyon Açıklaması',
+            loggedInUser.userType == 'organization'
+                ? Row(
+                    children: <Widget>[
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 20),
+                              child: Text(
+                                'Organizasyon Açıklaması',
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                Spacer(),
-                Center(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(context,
-                            CupertinoPageRoute(builder: (context) {
-                          return EditOrganizationProfilePage(
-                            orgTitle: orgTitle,
-                            orgImgUrl: orgImgUrl,
-                            orgDesc: orgDesc,
-                          );
-                        }));
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 40),
-                              child: Text(
-                                orgDesc,
-                                style: TextStyle(color: Colors.grey),
-                              ),
+                      Spacer(),
+                      Center(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context,
+                                  CupertinoPageRoute(builder: (context) {
+                                return EditOrganizationProfilePage(
+                                  orgTitle: orgTitle,
+                                  orgImgUrl: orgImgUrl,
+                                  orgDesc: orgDesc,
+                                );
+                              }));
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(right: 40),
+                                    child: Text(
+                                      orgDesc,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                    bottom: 0,
+                                    right: 20,
+                                    child: Container(
+                                      height: 15,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          width: 4,
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        ),
+                                        color: Colors.green,
+                                      ),
+                                      child: Icon(
+                                        Icons.edit,
+                                        color: Colors.black,
+                                      ),
+                                    )),
+                              ],
                             ),
                           ),
-                          Positioned(
-                              bottom: 0,
-                              right: 20,
-                              child: Container(
-                                height: 15,
-                                width: 15,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
-                                  ),
-                                  color: Colors.green,
-                                ),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.black,
-                                ),
-                              )),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                    ],
+                  )
+                : Container(),
             Divider(
-              color: Color.fromARGB(255, 214, 205, 205),
-              height: 50,
-              thickness: 1,
+              color: loggedInUser.userType == 'organization'
+                  ? Color.fromARGB(255, 214, 205, 205)
+                  : Colors.transparent,
+              height: loggedInUser.userType == 'organization' ? 50 : 20,
+              thickness: loggedInUser.userType == 'organization' ? 1 : 0,
             ),
             Row(
               children: <Widget>[
@@ -507,99 +509,38 @@ class _MyProfileState extends State<MyProfile> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: EdgeInsets.only(right: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.settings, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Ayarlar',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: EdgeInsets.only(left: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.info, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Bilgilerim',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.45,
-                      margin: EdgeInsets.only(right: 8),
-                      padding: EdgeInsets.only(left: 8),
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: mFillColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: mBorderColor, width: 1),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.message_rounded, color: Colors.indigo),
-                          Padding(
-                            padding: EdgeInsets.only(left: 16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Mesajlarım',
-                                  style: mServiceTitleStyle,
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                    GestureDetector(
+                      onTap: () {
+                        logout(context);
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        margin: EdgeInsets.only(right: 8),
+                        padding: EdgeInsets.only(left: 8),
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: mFillColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: mBorderColor, width: 1),
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.logout_rounded, color: Colors.indigo),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Çıkış yap',
+                                    style: mServiceTitleStyle,
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     Container(

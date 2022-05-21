@@ -269,7 +269,7 @@ class _EventDetailState extends State<EventDetail> {
                                       .collection('members')
                                       .doc(loggedInUser.uid)
                                       .update({
-                                    'join ${loggedInUser.uid}': false,
+                                    'join': false,
                                   });
                                 } else if (join == false) {
                                   storeNotificationToken();
@@ -285,7 +285,7 @@ class _EventDetailState extends State<EventDetail> {
                                       .collection('members')
                                       .doc(loggedInUser.uid)
                                       .set({
-                                    'join ${loggedInUser.uid}': true,
+                                    'join': true,
                                     'memberId': loggedInUser.uid,
                                   });
                                 }

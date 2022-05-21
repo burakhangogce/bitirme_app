@@ -15,6 +15,7 @@ class EditEvent extends StatefulWidget {
       eventDuration,
       eventCat;
   final Timestamp eventDate;
+  final bool eventStatus;
 
   const EditEvent(
       {Key? key,
@@ -26,6 +27,7 @@ class EditEvent extends StatefulWidget {
       required this.eventImg,
       required this.eventLink,
       required this.eventDuration,
+      required this.eventStatus,
       required this.eventCat})
       : super(key: key);
 
@@ -271,6 +273,18 @@ class _EditEventState extends State<EditEvent> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
+                FlatButton(
+                    onPressed: () {
+                      FirebaseFirestore.instance
+                          .collection('events')
+                          .doc(widget.eventId)
+                          .update({'eventStatus': widget.eventStatus});
+                    },
+                    color: Colors.blueGrey,
+                    child: Text(
+                      widget.eventStatus == true ? "Pasif Et!" : "Aktif Et!",
+                      style: TextStyle(color: Colors.white),
+                    )),
                 FlatButton(
                     color: Colors.blueGrey,
                     child: Text(

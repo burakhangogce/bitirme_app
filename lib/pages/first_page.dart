@@ -3,6 +3,7 @@ import 'package:bitirme_app/pages/home_page.dart';
 import 'package:bitirme_app/pages/organization/home_organization.dart';
 import 'package:bitirme_app/pages/edit_photo.dart';
 import 'package:bitirme_app/pages/profile_page.dart';
+import 'package:bitirme_app/pages/search_events.dart';
 import 'package:bitirme_app/widgets/org_all_chat.dart';
 import 'package:bitirme_app/widgets/user_all_chat.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -11,6 +12,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'organization/statistics_organization.dart';
 
 const mBackgroundColor = Color(0xFFFAFAFA);
 const mBlueColor = Color(0xFF2C53B1);
@@ -111,8 +114,11 @@ class _HomeScreenState extends State<HomeScreen> {
             : UserAllChats();
         break;
       case 2:
-        return Container();
-        break;
+        return loggedInUser.userType == "organization"
+            ? StatisticsOrganization()
+            : SearchEvents(
+                dropCat: 'Genel',
+              );
       case 3:
         return MyProfile();
         break;
@@ -157,7 +163,9 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: _page == 2
                   ? new SvgPicture.asset('assets/icons/watch_colored.svg')
                   : new SvgPicture.asset('assets/icons/watch.svg'),
-              label: 'Watch List'),
+              label: loggedInUser.userType == 'organization'
+                  ? 'İstatistik'
+                  : 'Keşfet'),
           BottomNavigationBarItem(
             icon: _page == 3
                 ? new SvgPicture.asset('assets/icons/account_colored.svg')

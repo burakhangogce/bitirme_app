@@ -1,5 +1,7 @@
 import 'package:bitirme_app/pages/organization/create_event.dart';
 import 'package:bitirme_app/pages/organization/edit_event.dart';
+import 'package:bitirme_app/pages/organization/statistics_event.dart';
+import 'package:bitirme_app/pages/organization/statistics_organization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -304,18 +306,14 @@ class _OrganizationHomeState extends State<OrganizationHome> {
                                 children: [
                                   FlatButton(
                                       onPressed: () {
-                                        FirebaseFirestore.instance
-                                            .collection('events')
-                                            .doc(map['eventId'])
-                                            .update({
-                                          'eventStatus': !map['eventStatus']
-                                        });
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                StatisticsEvent());
                                       },
                                       color: Colors.blueGrey,
                                       child: Text(
-                                        map['eventStatus'] == true
-                                            ? "Pasif Et!"
-                                            : "Aktif Et!",
+                                        "İstatistik",
                                         style: TextStyle(color: Colors.white),
                                       )),
                                   FlatButton(
@@ -355,6 +353,7 @@ class _OrganizationHomeState extends State<OrganizationHome> {
                                             eventImg: map['eventImg'],
                                             eventLink: map['eventLink'],
                                             eventPlat: map['eventPlat'],
+                                            eventStatus: map['eventStatus'],
                                           );
                                         }));
                                       },

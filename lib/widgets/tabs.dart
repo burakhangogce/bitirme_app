@@ -47,7 +47,7 @@ class SimpleTab extends StatelessWidget {
             child: TabBarView(children: [
               myEvents(),
               eventList(),
-              delayEventList(),
+              delayEvent(),
             ]),
           ),
         ));

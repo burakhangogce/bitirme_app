@@ -137,7 +137,12 @@ class _HomeScreenState extends State<HomeScreen> {
       // Setting up AppBar
       appBar: AppBar(
         backgroundColor: mBackgroundColor,
-        title: SvgPicture.asset('assets/svg/appname.svg'),
+        title: Image.asset(
+          'assets/svg/appLogo.jpeg',
+          //fit: BoxFit.fill,
+          width: 50,
+          height: 30,
+        ),
         elevation: 0,
         toolbarHeight: _page != 0 ? 0 : 50,
       ),
